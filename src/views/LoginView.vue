@@ -25,7 +25,7 @@
       </div>
       <div class="signup">
         <span>가입만 해도 즉시 15% 할인</span>
-        <button class="signup-btn"><a href="http://localhost:8086/member/memberSignUp">회원가입</a></button>
+        <button class="signup-btn"><a href="http://localhost:8080/joinmember">회원가입</a></button>
         <!-- 회원가입 페이지는 http://localhost:8086/ 에서 JSP로 제작 -->
       </div>
     </div>
@@ -60,7 +60,8 @@ export default {
           userId : this.id,
           userPwd : this.pwd
         }).then((res) => {
-          if(res.data.userId===undefined){
+          if(res.data.userId === undefined){
+            console.log(res.data.userId)
             alert('아이디 또는 패스워드를 확인하세요.')
             this.id=''
             this.pwd=''

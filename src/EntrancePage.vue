@@ -26,21 +26,12 @@ export default {
   .main {
     display: grid;
     grid-template-columns: repeat(5, 20%);
-    grid-template-rows: repeat(1, 10%);
     width: 100%;
     min-width: 1400px;
     height: 100%;
     gap: 0;
     grid-template-areas:
-      "a b b b b"
-      "a b b b b"
-      "a b b b b"
-      "a b b b b"
-      "a b b b b"
-      "a b b b b"
-      "a b b b b"
-      "a b b b b"
-      "a b b b b"
+      "a b b b b" 
       "a c c c c";
     margin-top: 126px;
   }
@@ -50,8 +41,12 @@ export default {
   }
   .middle {
     grid-area: b;
+    height: 100%;
+    display: block;
   }
   .bottom {
     grid-area: c;
+    height: 100%;
+    display: block;
   }
 </style>

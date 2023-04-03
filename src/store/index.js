@@ -6,6 +6,7 @@ export default createStore({
     signInPage: false,
     urlAddress: 'location',
     idConfirmed: false,
+    myPageLink: '/login',
     userInfo:{}
     // 로그인 보안 취약(Application - Local Storage에 비밀번호 드러남
     // 추후 보완 예정 - Server(Back)에서 bcrypt 활용
@@ -23,10 +24,12 @@ export default createStore({
     signIn(state, payload){
       state.userInfo = payload
       state.idConfirmed = true
+      state.myPageLink = '/MyPage'
     },
     signOut(state){
       state.userInfo = {}
       state.idConfirmed = false
+      state.myPageLink = '/login'
     }
   },
   actions: {
