@@ -5,13 +5,13 @@
         <router-link to="/">IGSJ 스토어</router-link>
       </span>
       <span>
-        <router-link to="#">
-          대분류
+        <router-link :to="{name: 'item', params: {cno: this.midLvCatArr[0].category_level}}">
+          {{this.midLvCatArr[0].big_ctg}}
         </router-link>
       </span>
       <span>
-        <router-link to="#">
-          중분류
+        <router-link :to="{name: 'item', params: {cno: this.midLvCatArr[0].cno}}">
+          {{this.midLvCatArr[0].category_name}}
         </router-link>
       </span>
     </p>
@@ -85,20 +85,16 @@
             <div class="option-box">
               <select v-model="size">
                 <option value="">옵션 선택</option>
-                <option value="S">S</option>
-                <option value="M">M</option>
-                <option value="L">L</option>
-                <option value="XL">XL</option>
-                <option value="2XL">2XL</option> 
+                <option :value="sz" :key='i' v-for="(sz, i) in sizeArr">{{sz}}</option>
               </select>
             </div>
-            <div class="count-check" v-if="this.size!==''">
-              <span class="count-check-size">{{this.size}}</span>
+            <div :key='i' v-for="(sz, i) in sizeArr" :id="sz" class="count-check" style="display:none;">
+              <span class="count-check-size">{{sz}}</span>
               <span class="count-check-count">
                 <input type="number" min="1" :max="this.productInfo.product_stock" v-model.number="count"/>
               </span>
-              <span class="count-check-sum">{{totalPrice}}원</span>
-              <span class="count-check-delete" @click="removeCount">
+              <span class="count-check-sum">{{pricePerOption}}원</span>
+              <span class="count-check-delete" :name="sz" @click="removeCount">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="grey" class="bi bi-x" viewBox="0 0 16 16">
                   <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
                 </svg>
@@ -106,7 +102,7 @@
             </div>
             <div class="sum-total-price">
               <span>총 상품 금액</span>
-              <span>{{totalPrice}}원</span>
+              <span>{{totalSum}}원</span>
             </div>
             <div class="btn-box">
               <button class="purchase"><b>바로구매</b></button>
@@ -130,25 +126,39 @@
 
 <script>
 import {Tooltip} from 'bootstrap'
+
 export default {
   data() {
     return {
       pno:'',
+      midLvCatArr: {},
       productInfo: {},
       size: '',
-      count: 1
+      sizeArr: ['S', 'M', 'L', 'XL', '2XL'],
+      count: 1,
+      totalSum: ''
     }
   },
   created(){
+    this.$store.commit('setUrl', window.location.href)
     this.pno = this.$route.params.pno
     this.fn_productInfo(this.pno)
+    this.fn_CategoryDetails(101) // 상품 cno 어케 넣노 this.productInfo.cno
   },
   mounted(){
     new Tooltip(document.body, {selector: "[data-bs-toggle='tooltip']"})
   },
+  watch: {
+    size: function(val){
+      document.getElementById(val).style.display="flex"
+    }
+  },
   computed: {
-    totalPrice() {
+    pricePerOption() {
       return (this.productInfo.product_price * this.count).toLocaleString()
+    },
+    totalSum() {
+      return this.pricePerOption
     }
   },
   methods: {
@@ -156,15 +166,25 @@ export default {
       this.$axios.get(this.$serverUrl + '/product/detail?pno=' + pno)
       .then((res) => {
         this.productInfo = res.data
-        console.log(this.productInfo)
       }).catch((err) => {
         if (err.message.indexOf('Network Error') > -1) {
           alert('Error')
         }
       })
     },
-    removeCount(){
-      document.querySelector('.count-check').style.display="none"
+    fn_CategoryDetails(cno) {
+      this.$axios.get(this.$serverUrl + '/category/items/' + cno)
+      .then((res) => {
+        this.midLvCatArr = res.data
+      }).catch((err) => {
+        if (err.message.indexOf('Network Error') > -1) {
+          alert('Category Error')
+        }
+      })
+    },
+    removeCount(evt){
+      alert(evt.target.getAttribute("name"))
+      document.getElementById(evt.target.getAttribute("name")).style.display="none"
     }
   }
 }

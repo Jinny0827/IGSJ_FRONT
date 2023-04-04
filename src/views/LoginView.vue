@@ -7,8 +7,10 @@
         <button :class="{'focused':guestActivate}" @click="forGuest">비회원 주문 조회</button>
       </div>
       <div class="member-login" v-if="this.memberActivate">
-        <input id="id" type="text" v-model="id" maxlength="20" placeholder="아이디" v-focus>
-        <input id="pwd" type="password" v-model="pwd" maxlength="30" autocomplete="on" placeholder="비밀번호">
+        <form>
+          <input id="id" type="text" v-model="id" maxlength="20" placeholder="아이디" v-focus>
+          <input id="pwd" type="password" v-model="pwd" maxlength="30" autocomplete="on" placeholder="비밀번호">
+        </form>
         <button class="login-btn" @click="memberLogin">로그인</button>
         <div class="search-info">
           <a href="#">아이디 찾기</a>
@@ -25,7 +27,7 @@
       </div>
       <div class="signup">
         <span>가입만 해도 즉시 15% 할인</span>
-        <button class="signup-btn"><a href="http://localhost:8080/joinmember">회원가입</a></button>
+        <button class="signup-btn"><a href="http://localhost:8086/member/memberSignUp">회원가입</a></button>
         <!-- 회원가입 페이지는 http://localhost:8086/ 에서 JSP로 제작 -->
       </div>
     </div>
@@ -60,8 +62,7 @@ export default {
           userId : this.id,
           userPwd : this.pwd
         }).then((res) => {
-          if(res.data.userId === undefined){
-            console.log(res.data.userId)
+          if(res.data.userId===undefined){
             alert('아이디 또는 패스워드를 확인하세요.')
             this.id=''
             this.pwd=''

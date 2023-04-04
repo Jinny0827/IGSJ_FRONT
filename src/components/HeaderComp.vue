@@ -37,10 +37,10 @@
       <div class="id-reveal" v-if="this.$store.state.idConfirmed===true">
         {{this.$store.state.userInfo.userId}}
       </div>
-      <router-link to="/passverify">마이페이지</router-link>
+      <router-link :to="this.$store.state.myPageLink">마이페이지</router-link>
       <router-link to="#">최근 본 상품</router-link>
       <router-link to="#" style="color:red;">좋아요</router-link>
-      <router-link to="#">장바구니</router-link>
+      <router-link to="/cart">장바구니</router-link>
       <router-link to="#">주문배송조회</router-link>
       <router-link to="#">고객센터</router-link>
       <div v-if="this.$store.state.idConfirmed===true" @click="logout">로그아웃</div>
