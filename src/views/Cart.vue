@@ -6,7 +6,7 @@
       <table class="cart-list">
         <thead>
           <tr>
-            <th><div class="totalCnt">전체{{ totalCnt }} 개</div></th>
+            <!-- <th><div class="totalCnt">전체{{ totalCnt }} 개</div></th> -->
             <th><input type="checkbox" @click="selectAllCheckbox" v-model="allSelected" class="checkall"></th>
             <th></th>
             <th>상품명(옵션)</th>
@@ -17,35 +17,22 @@
           </tr>
         </thead>
         <tbody class="tbody">
-          <tr class="prod-on-cart">
-            <td><div class="count">{{ count }}</div></td>
+          <tr class="prod-on-cart" :key = "i" v-for="(cartList, i) in cartList">
+            <!-- <td><div class="count">{{ cartList.pno }}</div></td> -->
             <td><input class="selector" type="checkbox" v-model="select" name="check"></td>
             <td> <!--<div class="img-box"><img id="productImage" :src="this.productInfo.image" :alt="this.productInfo.pno"/></div>--></td>
-            <td class="product-name">[인사일런스] 오버사이즈 울 블레이저 BLACK</td>
+            <td class="product-name">{{ cartList.product_name }}</td>
             <td>
               <div class="cnt">
-                <button type="button" v-on:click="minus">-</button>
-                  <span class="product-cnt">{{ counter }}</span>
-                <button type="button" v-on:click="plus">+</button>
+                <button type="button" @click="minus()">-</button>
+                  <!-- <span class="product-cnt">{{ cartList.productCnt }}</span> -->
+                  <span class = "product-cnt">
+                    <input type = "number" id = "productcnt" v-model = "cartList.productCnt"/>
+                  </span>
+                <button type="button" @click="plus()">+</button>
               </div>
             </td>
-            <td><div class="product-price">{{ Number(ProductPrice).toLocaleString() }}</div><span>원</span></td>
-            <td><button @click="cancelProduct">삭제하기</button></td>
-            <td>배송비무료</td>
-          </tr>
-          <tr class="prod-on-cart">
-            <td><div class="count">{{ count+1 }}</div></td>
-            <td><input class="selector" type="checkbox" v-model="select" name="check"></td>
-            <td> <!--<div class="img-box"><img id="productImage" :src="this.productInfo.image" :alt="this.productInfo.pno"/></div>--></td>
-            <td class="product-name">[인사일런스] 오버사이즈 울 블레이저 NAVY</td>
-            <td>
-              <div class="cnt">
-                <button type="button" v-on:click="minus">-</button>
-                  <span class="product-cnt">{{ counter }}</span>
-                <button type="button" v-on:click="plus">+</button>
-              </div>
-            </td>
-            <td><div class="product-price">{{ Number(ProductPrice).toLocaleString() }}</div><span>원</span></td>
+            <td><div class="product-price">{{ cartList.product_price * cartList.productCnt }}</div><span>원</span></td>
             <td><button @click="cancelProduct">삭제하기</button></td>
             <td>배송비무료</td>
           </tr>
@@ -77,24 +64,20 @@
 </template>
 
 <script>
-
   export default {
     data() {
         return {
-            pno: "",
-            count: 1,
-            counter: 1,
-            productPrice: 30000,
-            totalPrice: 0
-        };
+          cartList : {}
+        }
     },
     created() {
+      this.cartInfo(this.$store.state.userInfo.userId)
       this.$store.commit('setUrl', window.location.href)
     },
     computed: {
       //개별상품 수량가격
         ProductPrice() {
-            return this.productPrice * this.counter;
+            return this.productPrice * this.productCnt;
         },
       //전체상품 수량가격
       TotalPrice() {
@@ -105,20 +88,32 @@
           initVal
         );
         return priceSum
-      }
+      },
     },
     methods: {
+        //장바구니 확인
+        cartInfo(userId) {
+          this.$axios.get(this.$serverUrl + "/cart/cartList/" + userId)
+          .then((res) => {
+            console.log(res.data)
+            this.cartList = res.data
+          }).catch((err) => {
+            if (err.message.indexOf('Network Error') > -1) {
+                alert('장바구니 불러오기 오류. 다시 시도해주십시오.')
+              }
+          })
+        },
         //상품 수량변경
         minus() {
           if(this.counter > 1) {
               alert("수량이 변경되었습니다.");
-              this.counter--
+              document.getElementById("productcnt").value--
             }
-            else this.counter -= 0
+            else document.getElementById("productcnt") -= 0
         },
         plus() {
             alert("수량이 변경되었습니다.");
-            this.counter++
+            document.getElementById("productcnt") + 1
         },
         //상품 개별삭제
         cancelProduct() {
@@ -127,12 +122,24 @@
         },
         //선택상품 삭제
         deletebutton() {
-            alert("선택상품이 삭제되었습니다.");
+            this.$axios.post(this.$serverUrl + "/cart/cartDelete", {
+                userId : this.userId,
+                pno : this.pno
+            }).then((res) => {
+                if(res.data == 1) {
+                  alert("상품 삭제가 완료되었습니다.")
+                } else if (res.data == 0) {
+                  alert("상품 삭제를 하지 못했습니다. 다시 시도해주십시오.")
+                }
+            }).catch((err) => {
+              if (err.message.indexOf('Network Error') > -1) {
+                alert('상품 삭제 서버 오류. 다시 시도해주십시오.')
+              }
+            })
         },
         selectAllCheckbox(){
           if(document.querySelectorAll(".checkall input[type='checkbox']:checked")){
-            //document.getElementsByClassName("selector").checked=true
-            alert('a')
+            document.getElementsByClassName("selector").checked=true
           }
         }
     }

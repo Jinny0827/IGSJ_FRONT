@@ -6,7 +6,7 @@
           <router-link to="/">IGSJ</router-link>
         </span>
         <span class="search_cont">
-          <input id="search" class="search" type="text" maxlength="20" 
+          <input id="search" class="search" type="text" maxlength="20"
            v-model="toSearch" @keyup.enter="searchProducts" placeholder="로라로라 × 재유 최대 10% 할인"
            oninput="this.value = this.value.replace(/^\s/g, '');"/>
           <button class="search_btn" @click="searchProducts">
@@ -42,8 +42,9 @@
       <router-link to="#" style="color:red;">좋아요</router-link>
       <router-link to="/cart">장바구니</router-link>
       <router-link to="#">주문배송조회</router-link>
-      <router-link to="#">고객센터</router-link>
+      <router-link to="/notice/NoticeList">고객센터</router-link>
       <div v-if="this.$store.state.idConfirmed===true" @click="logout">로그아웃</div>
+
     </nav>
   </header>
 </template>

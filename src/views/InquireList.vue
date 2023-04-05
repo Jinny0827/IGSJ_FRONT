@@ -13,6 +13,7 @@
       <thead>
         <tr>
           <th scope="col">번호</th>
+          <th scope="col">작성자</th>
           <th scope="col">제목</th>
           <th scope="col">내용</th>
           <th scope="col">작성일자</th>
@@ -20,37 +21,51 @@
       </thead>
       <tbody>
         <tr :key="i" v-for="(inquire, i) in inquireList">
-            <router-link to="InquireView">
-            <td>{{ inquire.bno }}</td>
-            <td>{{ inquire.title }}</td>
-            <td>{{ inquire.content }}</td>
-            <td>{{ inquire.reg_date }}</td>
-            </router-link>
+          <router-link to="/inquire/InquireList">
+            <td>{{ inquire.inquireNum }}</td>
+            <td>{{ inquire.userId }}</td>
+            <td>{{ inquire.inquireTitle }}</td>
+            <td>{{ inquire.inquireContent }}</td>
+            <td>{{ inquire.inquireReg_date }}</td>
+          </router-link>
         </tr>
       </tbody>
     </table>
 
     <div class="n-btn-group">
-      <router-link to="/InquireWrite">
+      <router-link to="/inquire/InquireWrite">
         <button class="n-btn">문의하기</button>
       </router-link>
     </div>
   </div>
 </template>
 
-<script>
+<script scoped>
 export default {
   data() {
     return {
-      inquireList: [
-        {
-          bno : "1",
-          title: "상품 불량ㅡㅡ",
-          content: "반팔이 찢어져서 왔어요;;",
-          reg_date: "2023.03.26"
-        }
-      ]
+      inquireList: {
+        inquireNum: '',
+        userId: '',
+        inquireTitle: '',
+        inquireContent: '',
+        inquireRegDate: ''
+      }
     };
+  },
+  created() {
+    this.InquireList();
+  },
+  methods: {
+    InquireList() {
+      this.$axios.get(this.$serverUrl + '/inquire/InquireList')
+      then((res) => {
+        console.log(res.data)
+        this.inquireList = res.data;
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
   },
 }
 </script>

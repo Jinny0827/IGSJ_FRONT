@@ -15,10 +15,10 @@
         <br>
       </div>
       <div class="n-btn-view">
-        <router-link to="/InquireWrite">
+        <router-link to="/inquire/InquireWrite">
           <button class="n-btn btn-wr">문의하기</button>
         </router-link>
-        <router-link to="/InquireList">
+        <router-link to="/inquire/InquireList">
           <button class="n-btn btn-list">목록으로</button>
         </router-link>
       </div>
@@ -32,7 +32,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .inquire-contents {
     padding: 10px;
     line-height: 20px;
@@ -67,7 +67,7 @@ export default {
     text-align: center;
     cursor: pointer;
     vertical-align: middle;
-    
+
 }
 .n-btn.btn-wr {
     border: 1px solid #f1f1f1;

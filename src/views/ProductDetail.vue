@@ -93,10 +93,10 @@
               <span class="count-check-count">
                 <input type="number" min="1" :max="this.productInfo.product_stock" v-model.number="count"/>
               </span>
-              <span class="count-check-sum">{{pricePerOption}}원</span>
-              <span class="count-check-delete" :name="sz" @click="removeCount">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="grey" class="bi bi-x" viewBox="0 0 16 16">
-                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+              <span class="count-check-sum">{{pricePerOption}}</span>
+              <span class="count-check-delete">
+                <svg :name="sz" @click="removeCount" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="grey"  viewBox="0 0 16 16">
+                  <path :name="sz" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
                 </svg>
               </span>
             </div>
@@ -106,7 +106,9 @@
             </div>
             <div class="btn-box">
               <button class="purchase"><b>바로구매</b></button>
-              <button class="cart"><b>장바구니</b></button>
+              <router-link :to="{name: 'cart', params: {pno : this.$route.params.pno}}">
+              <button @click="goCart()">장바구니</button>
+                </router-link>
             </div>
           </div>  
         </div>
@@ -131,6 +133,7 @@ export default {
   data() {
     return {
       pno:'',
+      userId: '',
       midLvCatArr: {},
       productInfo: {},
       size: '',
@@ -143,7 +146,6 @@ export default {
     this.$store.commit('setUrl', window.location.href)
     this.pno = this.$route.params.pno
     this.fn_productInfo(this.pno)
-    this.fn_CategoryDetails(101) // 상품 cno 어케 넣노 this.productInfo.cno
   },
   mounted(){
     new Tooltip(document.body, {selector: "[data-bs-toggle='tooltip']"})
@@ -158,33 +160,52 @@ export default {
       return (this.productInfo.product_price * this.count).toLocaleString()
     },
     totalSum() {
-      return this.pricePerOption
+      let sum = this.productInfo.product_price
+      return sum.toLocaleString()
     }
   },
   methods: {
-    fn_productInfo(pno){
-      this.$axios.get(this.$serverUrl + '/product/detail?pno=' + pno)
-      .then((res) => {
-        this.productInfo = res.data
-      }).catch((err) => {
-        if (err.message.indexOf('Network Error') > -1) {
-          alert('Error')
-        }
-      })
-    },
     fn_CategoryDetails(cno) {
       this.$axios.get(this.$serverUrl + '/category/items/' + cno)
-      .then((res) => {
-        this.midLvCatArr = res.data
-      }).catch((err) => {
+      .then((res) => {this.midLvCatArr = res.data})
+      .catch((err) => {
         if (err.message.indexOf('Network Error') > -1) {
           alert('Category Error')
         }
       })
     },
+    fn_productInfo(pno){
+      this.$axios.get(this.$serverUrl + '/product/detail?pno=' + pno)
+      .then((res) => {
+        this.productInfo = res.data
+        this.fn_CategoryDetails(this.productInfo.cno)
+      })
+      .catch((err) => {
+        if (err.message.indexOf('Network Error') > -1) {
+          alert('Error')
+        }
+      })
+    },
+    goCart() {
+      this.$axios.post(this.$serverUrl + "/cart/cartWrite", {
+          cartNum : this.cartNum,
+          userId : this.$store.state.userInfo.userId,
+          pno : this.pno,
+          productCnt : this.count,
+      }).then((res) => {
+        console.log(res.data)
+      }).catch((err) => {
+        if (err.message.indexOf('Network Error') > -1) {
+          alert('장바구니 이동 오류')
+        }
+      })
+    },
     removeCount(evt){
-      alert(evt.target.getAttribute("name"))
-      document.getElementById(evt.target.getAttribute("name")).style.display="none"
+      if(evt.target.getAttribute("name")===null) return false
+      else {
+        document.getElementById(evt.target.getAttribute("name")).style.display="none"
+        this.count=1
+      }
     }
   }
 }
@@ -357,6 +378,9 @@ export default {
   }
   .count-check-delete {
     width: 5%;
+    height:100%;
+  }
+  .count-check-delete svg{
     cursor: pointer;
   }
   .info_detail {

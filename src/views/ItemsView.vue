@@ -47,9 +47,9 @@
   </div>
 </template>
 
-<script>
+<script scoped>
 export default {
-  data () { 
+  data () {
     return {
       curCno: window.location.href.slice(-3),
       midLvCatArr: {},

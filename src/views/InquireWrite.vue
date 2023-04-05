@@ -9,13 +9,13 @@
           <span class="tap-t">평일 9:00 ~ 18:00</span>
         </li>
         <li class="cs-tap">
-          <router-link to="/InquireWrite" class="button">
+          <router-link to="/inquire/InquireWrite" class="button">
             <span class="tap-title">1:1 Q&A</span>
             <span class="tap-t">문의하러가기</span>
           </router-link>
         </li>
         <li class="cs-tap">
-          <router-link to="/InquireList" class="button">
+          <router-link to="/inquire/InquireList" class="button">
             <span class="tap-title">My Question</span>
             <span class="tap-t">내 문의내역</span>
           </router-link>
@@ -44,25 +44,21 @@
               <tr>
                 <th scope="row">제품번호</th>
                 <td class="order-check">
-                  <input type="text" name="ord-no" class="n-input" value="16482" readonly>
+                  <input type="text" name="ord-no" class="n-input" v-model="pno" readonly>
                 </td>
               </tr>
               <tr>
-                <th scope="row">문의번호</th>
-                <td class="order-check">
-                  <input type="text" name="ord-no" class="n-input" value="1" readonly>
-                </td>
               </tr>
               <tr class="n-name-row">
                 <th scope="row">작성일자</th>
                 <td>
-                  <input type="text" class="n-input" value="2023-03-29" readonly>
+                  <input type="text" class="n-input" v-model="inquireRegDate" readonly>
                 </td>
               </tr>
               <tr>
                 <th scope="row">작성자</th>
                 <td>
-                  <input type="text" class="n-input" value="이젠" readonly>
+                  <input type="text" class="n-input" v-model="userId" readonly>
                 </td>
               </tr>
               <tr>
@@ -83,11 +79,11 @@
       </div>
 
       <div class="n-btn-group">
-        <button @click="cancel();" class="n-btn btn-lighter">취소</button>
-        <button @click="qna_add();" class="n-btn btn-accent">작성하기</button>
+        <button type="button" @click="cancel();" class="n-btn btn-lighter">취소</button>
+        <button type="button" @click="qna_add();" class="n-btn btn-accent">작성하기</button>
       </div>
       </form>
-    </div>    
+    </div>
   </div>
 </template>
 
@@ -104,12 +100,12 @@ export default {
       history.back();
       }
     },
-    
+
   }
 }
 </script>
 
-<style>
+<style scoped>
 th, td {
     margin: 0;
     padding: 0;
@@ -120,6 +116,14 @@ th, td {
 
 body {
     margin: 0;
+}
+
+hr {
+  margin: 0;
+}
+
+ul {
+  padding: 0;
 }
 
 
@@ -293,7 +297,7 @@ body {
     text-align: center;
     cursor: pointer;
     vertical-align: middle;
-    
+
 }
 .n-btn.btn-lighter {
     border: 1px solid #f1f1f1;

@@ -48,5 +48,6 @@ export default {
     grid-area: c;
     height: 100%;
     display: block;
+    border-top: 1px solid darkgrey;
   }
 </style>
