@@ -66,10 +66,14 @@ export default {
         }
       })
       setTimeout(()=>{
-        document.querySelector(".products").appendChild(clone)
-        product[0].remove()
-        for(const i in product){
-          if(i>0) product[i].removeAttribute('style')
+        try {
+          document.querySelector(".products").appendChild(clone)
+          product[0].remove()
+          for(const i in product){
+            if(i>0) product[i].removeAttribute('style')
+          }
+        } catch(err) {
+          console.log(err) // 확인용 - 나중에 수정할 내용
         }
       },1000)
     }

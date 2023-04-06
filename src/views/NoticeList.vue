@@ -42,7 +42,6 @@
         </thead>
         <tbody>
           <tr :key="i" v-for="(board, i) in noticeList">
-
             <router-link :to="{ name: 'NoticeView', params: { bno: board.bno } }">
               <!-- name은 index.js에 지정된 경로 이름을 나타냄, params는 지정된 경로에 보내줄 값을 나타냄 -->
 
@@ -64,12 +63,11 @@
           </div>
         </div>
       </div>
-      <div>
+      <div class="notice-write" v-if="this.$store.state.userInfo.userVerify == 128">
         <router-link to="/notice/NoticeWrite">
-          <span>공지사항작성</span>
+          <button type="button">공지사항작성</button>
         </router-link>
       </div>
-
     </div>
 
   </div>
@@ -119,7 +117,7 @@ export default {
       let noticeMonth = date.getMonth() + 1;
       let noticeDate = date.getDate();
 
-      let fullDate = noticeYear + "-" + noticeMonth + "-" + noticeDate;
+      let fullDate = noticeYear + "년 - " + noticeMonth + "월 - " + noticeDate + "일";
 
       return fullDate;
     }
@@ -265,9 +263,32 @@ th {
   float: right;
 }
 
+.notice-write {
+  display: flex;
+  justify-content: right;
+}
+
+.notice-write>a>button {
+  /* router-link는 a태그로 지정해주어야 함 */
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+}
+
+.notice-write>a>button:hover {
+  background-color: #0a3bffbe;
+  transition: background 0.3s ease-in-out;
+}
+
 .paging-btn {
   width: auto;
   min-width: 33px;
   padding: 0 2px;
+}
+
+.notice-write button {
+  float: right;
+  background-color: #000;
+  color: #f1f1f1;
 }
 </style>

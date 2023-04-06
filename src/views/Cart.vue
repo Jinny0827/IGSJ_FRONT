@@ -22,7 +22,7 @@
             <td><input class="selector" type="checkbox" v-model="select" name="check"></td>
             <td> <!--<div class="img-box"><img id="productImage" :src="this.productInfo.image" :alt="this.productInfo.pno"/></div>--></td>
             <td class="product-name">{{ cartList.product_name }}</td>
-            <td>
+            <td class = "numberbox">
               <div class="cnt">
                 <button type="button" @click="minus()">-</button>
                   <!-- <span class="product-cnt">{{ cartList.productCnt }}</span> -->
@@ -107,9 +107,8 @@
         minus() {
           if(this.counter > 1) {
               alert("수량이 변경되었습니다.");
-              document.getElementById("productcnt").value--
+              document.getElementById("productcnt").value
             }
-            else document.getElementById("productcnt") -= 0
         },
         plus() {
             alert("수량이 변경되었습니다.");
@@ -142,8 +141,8 @@
             document.getElementsByClassName("selector").checked=true
           }
         }
+      }
     }
-}
 
 
 
@@ -301,6 +300,5 @@
             color: fff;
             cursor: pointer;
         }
-       
 
 </style>

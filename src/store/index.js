@@ -13,9 +13,7 @@ export default createStore({
   },
   mutations: {
     setUrl(state, payload){
-      state.urlAddress = payload
-      if(state.urlAddress.includes('login')) state.signInPage=true
-      else state.signInPage=false
+      state.signInPage = payload.includes('login') ? true : false
     },
     signIn(state, payload){
       state.userInfo = payload

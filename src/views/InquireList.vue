@@ -5,10 +5,11 @@
     </header>
     <table class="n-table table-col">
       <colgroup>
-      <col style="width:8%">
-      <col style="width:12.6%">
-      <col style="width:*">
-      <col style="width:20%">
+        <col style="width: 5%" />
+        <col style="width: 8%" />
+        <col style="width: 30%" />
+        <col style="width: *" />
+        <col style="width: 10%" />
       </colgroup>
       <thead>
         <tr>
@@ -20,13 +21,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr :key="i" v-for="(inquire, i) in inquireList">
-          <router-link to="/inquire/InquireList">
+        <tr :key="i" v-for="(inquire, i) in inpList">
+          <router-link  :to="{ name: 'InquireView', params: { inquireNum: inquire.inquireNum } }"
+          v-if="inquire.userId == this.$store.state.userInfo.userId">
             <td>{{ inquire.inquireNum }}</td>
             <td>{{ inquire.userId }}</td>
             <td>{{ inquire.inquireTitle }}</td>
             <td>{{ inquire.inquireContent }}</td>
-            <td>{{ inquire.inquireReg_date }}</td>
+            <td>{{ convertTime(inquire.inquireRegDate) }}</td>
           </router-link>
         </tr>
       </tbody>
@@ -40,37 +42,52 @@
   </div>
 </template>
 
-<script scoped>
+<script>
 export default {
   data() {
     return {
-      inquireList: {
-        inquireNum: '',
-        userId: '',
-        inquireTitle: '',
-        inquireContent: '',
-        inquireRegDate: ''
-      }
+      inpList: {
+        userId: "", // 유저아이디
+        inquireNum: "", // 제품문의번
+        pno: "", // 제품번호
+        inquireTitle: "", // 문의제목
+        inquireContent: "", // 문의내용
+        inquireRegDate: "", // 문의날짜
+      },
     };
   },
   created() {
-    this.InquireList();
+    this.inquireList();
   },
   methods: {
-    InquireList() {
-      this.$axios.get(this.$serverUrl + '/inquire/InquireList')
-      then((res) => {
-        console.log(res.data)
-        this.inquireList = res.data;
-      }).catch((err) => {
-        console.log(err)
-      })
+    inquireList() {
+      this.$axios
+        .get(this.$serverUrl + "/inquire/InquireList")
+        .then((res) => {
+          console.log(res.data);
+          this.inpList = res.data;
+        })
+        .catch((err) => {
+          this.error = err.message;
+        });
+    },
+    // 시간
+    convertTime(noticeTime) {
+      var time = new Date(noticeTime).getTime();
+      var date = new Date(time);
+      let noticeYear = date.getFullYear();
+      let noticeMonth = date.getMonth() + 1;
+      let noticeDate = date.getDate();
+
+      let fullDate = noticeYear + "년 - " + noticeMonth + "월 - " + noticeDate + "일";
+
+      return fullDate;
     }
   },
-}
+};
 </script>
 
-<style>
+<style scope>
 .inquire-box {
   width: 100%;
   min-height: 600px;
