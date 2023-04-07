@@ -227,11 +227,12 @@ th {
   vertical-align: middle;
   text-align: center;
   padding: 0;
+  background-color: #f1f1f1;
 }
 
 .notice-table td {
   height: 52px;
-  border-bottom: 1px solid #000000;
+  border-bottom: 1px solid #ccc;
   font-size: 13px;
   vertical-align: middle;
   font-weight: normal;

@@ -27,7 +27,7 @@
       </div>
       <div class="signup">
         <span>가입만 해도 즉시 15% 할인</span>
-        <button class="signup-btn"><a href="http://localhost:8086/member/memberSignUp">회원가입</a></button>
+        <button class="signup-btn"><router-link to="/joinmember">회원가입</router-link></button>
         <!-- 회원가입 페이지는 http://localhost:8086/ 에서 JSP로 제작 -->
       </div>
     </div>

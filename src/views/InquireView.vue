@@ -1,13 +1,14 @@
 <template>
   <div class="inquire-box">
     <header class="inquire-title">
-      <h1 class="tit">나의 1:1문의내역</h1>
+      <h2 class="inquire-tit">나의 1:1문의내역</h2>
+      <hr>
     </header>
-    <div class="board-contents">
+    <div class="inquire-contents">
       <div class="section_form">
         <div class="area">
           <header class="n-section-title">
-            <h2 class="tit">{{ this.inquireInfo.inquireNum }} 번 문의내역</h2>
+            <h4 class="tit">{{ this.inquireInfo.inquireNum }}. 문의내역</h4>
           </header>
           <table class="n-table table-row">
             <tbody>
@@ -62,15 +63,18 @@
             </tbody>
           </table>
         </div>
-        <div class="btn-updatebtn">
-          <router-link  :to="{ name: 'InquireModify', params: { inquireNum: this.inquireInfo.inquireNum } }">
-            <button type="button">문의수정</button>
-          </router-link>
-          <router-link to="/inquire/InquireList">
-            <button type="button">목록으로</button>
-          </router-link>
-        </div>
       </div>
+    </div>
+    <div class="btn-gr">
+      <router-link  :to="{ name: 'InquireModify', params: { inquireNum: this.inquireInfo.inquireNum } }">
+        <button type="button" class="n-btn btn-mo">문의수정</button>
+      </router-link>
+
+      <button type="button" class="n-btn btn-del" @click="inquireDel()">삭제하기</button>
+
+      <router-link to="/inquire/InquireList">
+        <button type="button" class="n-btn btn-mo">목록으로</button>
+      </router-link>
     </div>
   </div>
 </template>
@@ -123,33 +127,152 @@ export default {
 
       return fullDate;
     },
+    // 문의 삭제
+    inquireDel() {
+      if (confirm("문의사항을 삭제하시겠습니까?\n삭제된정보는 복구되지 않습니다.")) {
+        this.$axios.post(this.$serverUrl + '/inquire/InquireDelete/' + this.inquireInfo.inquireNum)
+          .then((res) => {
+            if (res.data == true) {
+              alert("문의사항 삭제가 완료되었습니다.")
+
+              location.href = "/inquire/InquireList";
+            } else {
+              alert("삭제에 실패하였습니다.")
+
+              return false;
+            }
+
+          }).catch((err) => {
+            if (err.message.indexOf('Network Error') > -1) {
+              alert('Error')
+            }
+          })
+      } else {
+        alert("삭제를 취소하셨습니다.");
+
+        return false;
+      }
+    }
   },
 };
 </script>
 
 <style scoped>
-.inquire-contents {
-  padding: 10px;
-  line-height: 20px;
-}
-.contents-title h3 {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-.contents-title span {
-  font-size: 15px;
-  color: #4d4d4d;
-  margin-bottom: 10px;
+th,
+td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: top;
+  background: transparent;
 }
 
-.n-btn-view {
-  min-height: 32px;
-  text-align: left;
-  padding-top: 20px;
-  clear: both;
+ul {
+  padding: 0;
+}
+
+hr {
+  margin: 0;
+}
+
+body {
+  margin: 0;
+}
+
+.inquire-tit {
+  margin: 0;
+  padding: 20px;
+}
+
+.inquire-box {
+  min-height: 800px;
+  display: flex;
+  flex-direction: column;
+}
+
+.inquire-contents {
+  padding: 20px;
+  line-height: 20px;
+}
+
+.n-section-title {
+  border-bottom: 2px solid #ccc;
+  margin-top: 20px;
+  line-height: 1.5;
+  font-size: 14px;
   position: relative;
 }
+
+.n-table {
+  width: 100%;
+  line-height: 1.5;
+  font-size: 14px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  border-bottom: 1px solid #ccc;
+}
+.n-table th {
+  width: 170px;
+  padding-top: 22px;
+  padding-right: 20px;
+  
+}
+
+.n-table.table-row th {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: top;
+}
+
+.n-table.table-row th,
+.n-table.table-row td {
+  height: auto;
+  padding: 15px 0;
+  box-sizing: border-box;
+  border-top: 1px solid #f1f1f1;
+  border-bottom: none;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.n-input {
+  width: 100%;
+  height: 32px;
+  padding: 5px 6px;
+  border: none;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  font-size: 14px;
+  line-height: 20px;
+  transition: border 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+.n-input:focus {
+  outline: none;
+}
+
+.textarea-input {
+  width: 100%;
+  height: 200px;
+  padding: 5px 6px;
+  border: none;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  font-size: 14px;
+  line-height: 20px;
+  transition: border 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+.btn-gr {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+
 .n-btn {
   display: inline-block;
   min-width: 100px;
@@ -163,20 +286,20 @@ export default {
   cursor: pointer;
   vertical-align: middle;
 }
-.n-btn.btn-wr {
+.n-btn.btn-mo {
   border: 1px solid #f1f1f1;
   background-color: #f1f1f1;
   color: #000000;
 }
-.n-btn.btn-wr:hover {
+.n-btn.btn-mo:hover {
   background-color: #c3c3c3be;
   transition: background 0.3s ease-in-out;
 }
-.n-btn.btn-list {
+.n-btn.btn-del {
   border: none;
   background-color: #000000;
 }
-.n-btn.btn-list:hover {
+.n-btn.btn-del:hover {
   border: none;
   background-color: #0a3bffbe;
   transition: background 0.3s ease-in-out;

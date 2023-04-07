@@ -133,6 +133,9 @@ export default {
 		}
 		
 	},
+	created(){
+		this.$store.commit('setUrl', window.location.href)
+	},
 	methods: {
 		allchk() {
 			const agreeChkAll = document.querySelector('input[name=agree_all]');

@@ -1,5 +1,5 @@
 <template>
-  <div class="board-box">
+  <div class="inquire-box">
     <div class="cs-center-tap">
       <h2 class="title-pg">CS center</h2>
       <hr />
@@ -23,7 +23,7 @@
       </ul>
     </div>
 
-    <div class="board-contents">
+    <div class="inquire-contents">
       <form method="post" action="">
         <h4 class="title_cs font-mss">1:1 Q&A</h4>
         <ul class="n-info-txt">
@@ -58,7 +58,6 @@
                   <td class="order-check">
                     <input
                       type="text"
-                      name="ord-no"
                       class="n-input userId"
                       v-model="userId"
                       readonly
@@ -72,7 +71,6 @@
                     <input
                       type="text"
                       class="n-input"
-                      name="subject"
                       v-model="inquireTitle"
                       placeholder="제목을 입력해주세요"
                     />
@@ -82,7 +80,6 @@
                   <th scope="row">문의내용</th>
                   <td>
                     <textarea
-                      name="qa_msg"
                       cols="100"
                       rows="100"
                       class="textarea-input"
@@ -184,9 +181,16 @@ hr {
 
 ul {
   padding: 0;
+  list-style: none;
 }
 
-.board-box {
+ul li {
+    margin: 5px 0 0 0;
+    color: #777;
+    font-size: 15px;
+}
+
+.inquire-box {
   border-bottom: 1px solid #ddd;
   min-height: 800px;
   display: flex;
@@ -207,6 +211,7 @@ ul {
 .cs-center-tap ul li {
   display: table-cell;
   width: 33.3%;
+  list-style: none;
   margin: -1px 0 0 0;
   border-bottom: 1px solid #ddd;
   border-left: 1px solid #ddd;
@@ -215,6 +220,7 @@ ul {
 .cs-center-tap ul li:first-child {
   border-left: none;
 }
+
 .cs-tap {
   cursor: pointer;
 }
@@ -235,16 +241,15 @@ ul {
   color: #000;
 }
 
-.board-contents {
-  border-bottom: 1px solid #ddd;
+.inquire-contents {
   padding: 20px;
 }
 
-.n-info-txt > li:before {
+/* .n-info-txt > li:before {
   content: "▶";
   position: inherit;
   margin-right: 5px;
-}
+} */
 .title_cs {
   font-size: 18px;
   font-weight: 600;
@@ -256,6 +261,13 @@ ul {
   font-size: 14px;
   padding-top: 20px;
 }
+
+.n-info-txt > li:before {
+  content: "▶";
+  position: inherit;
+  margin-right: 5px;
+}
+
 .n-info-txt > li:first-of-type {
   margin-top: 0;
 }
@@ -270,7 +282,7 @@ ul {
 }
 .n-section-title {
   border-bottom: 3px solid #000000;
-  margin-top: 48px;
+  margin-top: 30px;
   line-height: 1.5;
   font-size: 14px;
   position: relative;
@@ -283,6 +295,7 @@ ul {
   table-layout: fixed;
   border-bottom: 1px solid #ccc;
 }
+
 .n-table.table-row th,
 .n-table.table-row td {
   height: auto;
@@ -293,6 +306,12 @@ ul {
   font-size: 15px;
   font-weight: 600;
   text-align: left;
+}
+
+.n-table th {
+  width: 170px;
+  padding-top: 22px;
+  padding-right: 20px;
 }
 
 .n-input {
@@ -323,27 +342,7 @@ ul {
   font-size: 14px;
   line-height: 20px;
   transition: border 0.2s ease-in-out;
-}
-
-.n-table th {
-  width: 170px;
-  padding-top: 22px;
-  padding-right: 20px;
-}
-.n-table.table-row th {
-  text-align: left;
-  font-weight: normal;
-  vertical-align: top;
-}
-.n-table.table-row th,
-.n-table.table-row td {
-  height: auto;
-  padding: 15px 0;
-  box-sizing: border-box;
-  border-top: 1px solid #f1f1f1;
-  border-bottom: none;
-  font-size: 14px;
-  text-align: left;
+  resize: none;
 }
 
 .n-btn-group {

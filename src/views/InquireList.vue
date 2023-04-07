@@ -5,11 +5,11 @@
     </header>
     <table class="n-table table-col">
       <colgroup>
-        <col style="width: 5%" />
         <col style="width: 8%" />
-        <col style="width: 30%" />
-        <col style="width: *" />
         <col style="width: 10%" />
+        <col style="width: 20%" />
+        <col style="width: *" />
+        <col style="width: 20%" />
       </colgroup>
       <thead>
         <tr>
@@ -31,10 +31,22 @@
             <td>{{ convertTime(inquire.inquireRegDate) }}</td>
           </router-link>
         </tr>
+        <!-- <tr :key="i" v-for="(inquire, i) in inpList">
+          <td v-if="inquire.userId">{{ inquire.inquireNum }}</td>
+          <td v-else>No content</td>
+          <td v-if="inquire.userId">{{ inquire.userId }}</td>
+          <td v-else>No content</td>
+          <td v-if="inquire.userId">{{ inquire.inquireTitle }}</td>
+          <td v-else>No content</td>
+          <td v-if="inquire.userId">{{ inquire.inquireContent }}</td>
+          <td v-else>No content</td>
+          <td v-if="inquire.userId">{{ convertTime(inquire.inquireRegDate) }}</td>
+          <td v-else>No content</td>
+        </tr> -->
       </tbody>
     </table>
 
-    <div class="n-btn-group">
+    <div class="btn-gr">
       <router-link to="/inquire/InquireWrite">
         <button class="n-btn">문의하기</button>
       </router-link>
@@ -87,11 +99,11 @@ export default {
 };
 </script>
 
-<style scope>
+<style scoped>
 .inquire-box {
   width: 100%;
   min-height: 600px;
-  padding: 20px;
+  padding: 30px;
   display: flex;
   flex-direction: column;
 }
@@ -113,15 +125,23 @@ export default {
   vertical-align: middle;
   text-align: center;
   padding: 0;
+  background-color: #f1f1f1;
 }
 .inquire-box .n-table.table-col td {
   height: 52px;
-  border-bottom: 1px solid #000000;
+  border-bottom: 1px solid #ccc;
   font-size: 13px;
   vertical-align: middle;
   font-weight: normal;
   text-align: center;
 }
+
+.btn-gr {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 .inquire-box a {
   text-decoration: none;
   color: #000;

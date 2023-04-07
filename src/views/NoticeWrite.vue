@@ -113,7 +113,7 @@ export default {
 }
 </script>
 
-<style>
+<style scope>
 th, td {
     margin: 0;
     padding: 0;

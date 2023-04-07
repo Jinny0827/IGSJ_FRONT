@@ -31,6 +31,6 @@ export default createStore({
   modules: {
   },
   plugins:[createPersistedState({
-    paths:['userInfo', 'idConfirmed']
+    paths:['userInfo', 'idConfirmed', 'myPageLink']
   })]
 })
