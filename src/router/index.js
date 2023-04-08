@@ -12,6 +12,7 @@ const routes = [
   { path: '/notice/NoticeView/:bno', name: 'NoticeView',   component: () => import('../views/NoticeView.vue') },
   { path: '/notice/NoticeModifyPage/:bno',name: 'NoticeModify',   component: () => import('../views/NoticeModify.vue') },
   { path: '/inquire/InquireList',   name: 'InquireList',   component: () => import('../views/InquireList.vue') },
+  { path: '/answer/AnswerWrite:inquireNum',   name: 'AnswerWrite',   component: () => import('../views/AnswerWrite.vue') },
   { path: '/inquire/InquireWrite',  name: 'InquireWrite',  component: () => import('../views/InquireWrite.vue') },
   { path: '/inquire/InquireView/:inquireNum',   name: 'InquireView',   component: () => import('../views/InquireView.vue') },
   { path: '/inquire/InquireModify/:inquireNum', name: 'InquireModify', component: () => import('../views/InquireModify.vue') },
@@ -22,8 +23,8 @@ const routes = [
   { path: '/cart',                  name: 'cart',          component: () => import("../views/Cart.vue")},
   { path: '/orderList',             name: 'orderlist', component: () => import("../views/OrderList.vue")},
   { path: '/orderPage',             name: 'orderPage', component: () => import("../views/OrderPage.vue")},
-  { path: '/orderFinish',           name: 'orderFinish', component: () => import("../views/OrderFinish.vue")},
-  { path: '/orderDetail',           name: 'orderDetail', component: () => import("../views/OrderDetail.vue")}
+  { path: '/order/orderFinish/:orderNum',  name: 'orderFinish', component: () => import("../views/OrderFinish.vue")},
+  { path: '/order/orderDetailPage/:orderNum', name: 'orderDetail', component: () => import("../views/OrderDetail.vue")}
 
 ]
 

@@ -1,12 +1,11 @@
 <template>
   <div class="wrap">
     <div class="title">
-      <h2>Order / Payment</h2>
+      <h2>Cart</h2>
     </div>
       
     <ul class="thead">
             <!-- <li class="w2"><input type="checkbox" @click="selectAllCheckbox" v-model="allSelected" class="checkall"></li> -->
-            <li class="w8"></li>
             <li class="w30">상품명(옵션)</li>
             <li class="w10">수량</li>
             <li class="w20">주문금액</li>
@@ -17,13 +16,13 @@
     <ul class="tbody prod-on-cart" :key = "index" v-for="(item, index) in cartList">
             <!-- <div><div class="count">{{ cartList.pno }}</div></div> -->
             <!-- <li class="w2"><input class="selector" type="checkbox" v-model="select" name="check"></li> -->
-            <li class="w8"> <!--<div class="img-box"><img id="productImage" :src="this.productInfo.image" :alt="this.productInfo.pno"/></div>--></li>
+            <!--<li class="w8"><div class="img-box"><img id="productImage" :src="this.productInfo.image" :alt="this.productInfo.pno"/></div></li>-->
             <li class="product-name w30">{{ item.product_name }}</li>
             <li class = "numberbox w10">
                 <div class="cnt">
                   <button type="button" @click="minus(index)">-</button>
                     <span class = "product-cnt">
-                      <input type ="number" id = "productcnt" v-model.number = "item.productCnt" class="counter"/>
+                      <input type ="number" id = "productcnt" v-model.number = "item.productCnt" class="counter" @change = "modifyProduct(index)"/>
                     </span>
                   <button type="button" @click="plus(index)">+</button>
                 </div>
@@ -39,7 +38,7 @@
         </ul>
 
       <div class="cart">
-       <!--  <div class="del-button">
+        <!--  <div class="del-button">
           <button @click="del-button">선택삭제</button>
         </div> -->
         <ul class="caution">
@@ -60,7 +59,7 @@
         <div class="order-button">
           <button class="order" @click = "$router.push('/orderPage')">주문하기</button>
         </div>
-      </div>
+    </div>
   </div>
 </template>
 
@@ -73,7 +72,6 @@
     },
     created() {
       this.cartInfo(this.$store.state.userInfo.userId)
-      this.$store.commit('setUrl', window.location.href)
     },
     computed: {
       //전체상품 수량가격
@@ -146,16 +144,6 @@
         plus(index) {
           this.cartList[index].productCnt ++
         },
-        //상품 개별삭제
-        cancelProduct() {
-            alert("상품이 삭제되었습니다.");
-            document.querySelector(".prod-on-cart").style.display="none"
-        },
-        selectAllCheckbox(){
-          if(document.querySelectorAll(".checkall input[type='checkbox']:checked")){
-            document.getElementsByClassName("selector").checked=true
-          }
-        }
       }
     }
 </script>
@@ -169,6 +157,9 @@
 
           margin: 0;
           padding: 0;
+        }
+        ul {
+          border-bottom: 1px solid lightgray;
         }
 
         ul, li {
@@ -209,18 +200,21 @@
           display: table;
           width: 98%;
           margin: 0 auto;
-          margin-top: 50px;
+          margin-top: 20px;
+          margin-bottom: 50px;
           text-align: center;
           font-size: 14px;
         }
 
         .thead {
+          margin-top: 10px;
+          margin-bottom : 10px;
           width: 100%;
-          height: 30px;
+          height: 40px;
         }
         .thead li, .tbody li {
           float: left;
-          height: 50px;
+          height: 20px;
           line-height: 30px;
           text-align: center;
         }
@@ -347,6 +341,7 @@
         ul.caution {
             padding-top: 15px;
             text-align : left;
+            border-bottom: 5px;
         }
         ul.caution li {
             margin: 5px 0 0 0;

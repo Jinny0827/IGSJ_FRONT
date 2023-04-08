@@ -8,7 +8,7 @@
       <div class="section_form">
         <div class="area">
           <header class="n-section-title">
-            <h4 class="tit">{{ this.inquireInfo.inquireNum }}. 문의내역</h4>
+            <h4 class="tit">{{ this.inquireInfo.inquireNum }} 번 문의내역</h4>
           </header>
           <!-- 문의내용 -->
           <table class="n-table table-row">
@@ -34,52 +34,32 @@
               <tr class="n-same-row">
                 <th scope="row">문의내용</th>
                 <td>
-                  <textarea name="qa_msg" cols="100" rows="100" class="textarea-input"
+                  <textarea name="qa_msg" cols="100" rows="100" class="inquire-textarea"
                     readonly>{{ this.inquireInfo.inquireContent }}</textarea>
                 </td>
               </tr>
             </tbody>
           </table>
-
-          <!-- 답글내용 -->
-          <div v-if="this.answerInfo.ansContent != undefined">
-            <h4 class="tit">{{ this.inquireInfo.inquireNum }}.번 문의 답변내역</h4>
-            <table class="n-table table-row">
-              <tbody>
-                <tr class="n-same-row">
-                  <th scope="row">문의내용</th>
-                  <td>
-                    <textarea name="qa_msg" cols="100" rows="100" class="textarea-input"
-                    readonly>{{ answerInfo.ansContent }}</textarea>
-                  </td>
-                </tr>
-                <tr>
-                <th scope="row">작성날짜</th>
+          <!-- 답변하기 -->
+          <header class="n-section-title">
+            <h4 class="tit">{{ this.inquireInfo.inquireNum }} 번 문의내역 답변하기</h4>
+          </header>
+          <table class="n-table table-row">
+            <tbody>
+              <tr class="n-same-row">
+                <th scope="row">답변내역작성</th>
                 <td>
-                  <span id="reg_date" type="text" class="n-input" readonly>
-                    {{ convertTime(answerInfo.ansRegDate) }}
-                  </span>
+                  <textarea name="qa_msg" cols="100" rows="100" class="answer-textarea" v-model="this.answerInfo.ansContent"></textarea>
                 </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div v-else>
-            <h2>답변 내역이 없습니다.</h2>
-          </div>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
     <div class="btn-gr">
-      <router-link :to="{ name: 'InquireModify', params: { inquireNum: this.inquireInfo.inquireNum } }">
-        <button type="button" class="n-btn btn-mo">문의수정</button>
-      </router-link>
 
-      <router-link :to="{ name: 'AnswerWrite', params: { inquireNum: this.inquireInfo.inquireNum } }">
-        <button type="button" class="n-btn btn-mo">답변하기</button>
-      </router-link>
-
-      <button type="button" class="n-btn btn-del" @click="inquireDel()">삭제하기</button>
+      <button type="button" class="n-btn btn-mo" @click="answerWrite()">답변완료</button>
 
       <router-link to="/inquire/InquireList">
         <button type="button" class="n-btn btn-mo">목록으로</button>
@@ -110,7 +90,6 @@ export default {
   created() {
     this.inquireNum = this.$route.params.inquireNum;
     this.getinquireNum(this.inquireNum);
-    this.answerList(this.inquireNum);
   },
   methods: {
     // 게시글 불러오기위해 List에서 넘겨준 데이터를 받아내야함
@@ -133,46 +112,31 @@ export default {
           }
         });
     },
-    // 답글내역
-    answerList(inquireNum) {
+    answerWrite() {
       this.$axios
-        .get(this.$serverUrl + "/answer/AnswerList?inquireNum=" + inquireNum)
+        .post(this.$serverUrl + "/answer/AnswerWrite", {
+          inquireNum : this.inquireInfo.inquireNum,
+          ansContent : this.answerInfo.ansContent
+        })
 
         .then((res) => {
-          this.answerInfo = res.data;
-          console.log(this.answerInfo.ansContent)
+          if(res.data == true){
+            alert("답변 작성이 완료되었습니다.");
+
+            location.href = "/inquire/InquireView/" + this.inquireInfo.inquireNum;
+
+          } else {
+            alert("이미 답변이 달려있는 경우에는 추가답변이 불가합니다.\n문의를 새로 작성해주세요.");
+
+            return false;
+          }
 
         })
         .catch((err) => {
           this.error = err.message;
+          console.log(this.error);
 
         });
-    },
-    // 문의 삭제
-    inquireDel() {
-      if (confirm("문의사항을 삭제하시겠습니까?\n삭제된정보는 복구되지 않습니다.")) {
-        this.$axios.post(this.$serverUrl + '/inquire/InquireDelete/' + this.inquireInfo.inquireNum)
-          .then((res) => {
-            if (res.data == true) {
-              alert("문의사항 삭제가 완료되었습니다.")
-
-              location.href = "/inquire/InquireList";
-            } else {
-              alert("삭제에 실패하였습니다.")
-
-              return false;
-            }
-
-          }).catch((err) => {
-            if (err.message.indexOf('Network Error') > -1) {
-              alert('Error')
-            }
-          })
-      } else {
-        alert("삭제를 취소하셨습니다.");
-
-        return false;
-      }
     },
     // 시간변환
     convertTime(noticeTime) {
@@ -246,7 +210,6 @@ body {
   font-size: 14px;
   border-collapse: collapse;
   table-layout: fixed;
-  border-bottom: 1px solid #ccc;
 }
 
 .n-table th {
@@ -291,7 +254,7 @@ body {
   outline: none;
 }
 
-.textarea-input {
+.inquire-textarea{
   width: 100%;
   height: 200px;
   padding: 5px 6px;
@@ -301,7 +264,21 @@ body {
   font-size: 14px;
   line-height: 20px;
   transition: border 0.2s ease-in-out;
+  resize: none;
   pointer-events: none;
+}
+
+.answer-textarea{
+  width: 100%;
+  height: 200px;
+  padding: 5px 6px;
+  border: 1px solid #ccc;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  font-size: 14px;
+  line-height: 20px;
+  transition: border 0.2s ease-in-out;
+  resize: none;
 }
 
 .btn-gr {
@@ -345,9 +322,5 @@ body {
   border: none;
   background-color: #0a3bffbe;
   transition: background 0.3s ease-in-out;
-}
-
-textarea{
-  resize: none;
 }
 </style>

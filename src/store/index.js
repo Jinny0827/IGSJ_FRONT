@@ -7,6 +7,7 @@ export default createStore({
     urlAddress: 'location',
     idConfirmed: false,
     myPageLink: '/login',
+    myCartLink: '/login',
     userInfo: {}
   },
   getters: {
@@ -19,11 +20,13 @@ export default createStore({
       state.userInfo = payload
       state.idConfirmed = true
       state.myPageLink = '/passverify'
+      state.myCartLink = '/cart'
     },
     signOut(state){
       state.userInfo = {}
       state.idConfirmed = false
       state.myPageLink = '/login'
+      state.myCartLink = '/login'
     }
   },
   actions: {

@@ -22,8 +22,8 @@
       </thead>
       <tbody>
         <tr :key="i" v-for="(inquire, i) in inpList">
-          <router-link  :to="{ name: 'InquireView', params: { inquireNum: inquire.inquireNum } }"
-          v-if="inquire.userId == this.$store.state.userInfo.userId">
+          <router-link :to="{ name: 'InquireView', params: { inquireNum: inquire.inquireNum } }"
+            v-if="inquire.userId == this.$store.state.userInfo.userId">
             <td>{{ inquire.inquireNum }}</td>
             <td>{{ inquire.userId }}</td>
             <td>{{ inquire.inquireTitle }}</td>
@@ -31,21 +31,8 @@
             <td>{{ convertTime(inquire.inquireRegDate) }}</td>
           </router-link>
         </tr>
-        <!-- <tr :key="i" v-for="(inquire, i) in inpList">
-          <td v-if="inquire.userId">{{ inquire.inquireNum }}</td>
-          <td v-else>No content</td>
-          <td v-if="inquire.userId">{{ inquire.userId }}</td>
-          <td v-else>No content</td>
-          <td v-if="inquire.userId">{{ inquire.inquireTitle }}</td>
-          <td v-else>No content</td>
-          <td v-if="inquire.userId">{{ inquire.inquireContent }}</td>
-          <td v-else>No content</td>
-          <td v-if="inquire.userId">{{ convertTime(inquire.inquireRegDate) }}</td>
-          <td v-else>No content</td>
-        </tr> -->
       </tbody>
     </table>
-
     <div class="btn-gr">
       <router-link to="/inquire/InquireWrite">
         <button class="n-btn">문의하기</button>
@@ -66,6 +53,7 @@ export default {
         inquireContent: "", // 문의내용
         inquireRegDate: "", // 문의날짜
       },
+
     };
   },
   created() {
@@ -107,17 +95,20 @@ export default {
   display: flex;
   flex-direction: column;
 }
+
 .inquire-title {
   border-bottom: 3px solid #000;
   padding-bottom: 10px;
   line-height: 1.5;
   font-size: 15px;
 }
+
 .inquire-box .tit {
   display: inline-block;
   font-size: 24px;
   font-weight: 600;
 }
+
 .inquire-box .n-table th {
   height: 52px;
   border-bottom: 1px solid #000000;
@@ -127,6 +118,7 @@ export default {
   padding: 0;
   background-color: #f1f1f1;
 }
+
 .inquire-box .n-table.table-col td {
   height: 52px;
   border-bottom: 1px solid #ccc;
@@ -147,6 +139,7 @@ export default {
   color: #000;
   display: contents;
 }
+
 .inquire-box a:hover {
   color: #0a3bffbe;
   transition: color 0.3s ease-in-out;
@@ -166,8 +159,8 @@ export default {
   vertical-align: middle;
   border: none;
 }
+
 .inquire-box .n-btn:hover {
   background-color: #0a3bffbe;
   transition: background 0.3s ease-in-out;
-}
-</style>
+}</style>

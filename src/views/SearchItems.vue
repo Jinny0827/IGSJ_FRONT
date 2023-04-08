@@ -38,7 +38,6 @@ export default {
     }
   },
   created(){
-    this.$store.commit('setUrl', window.location.href)
     this.typedParam = this.$route.params.typed
     this.fn_searchedProducts(this.typedParam)
   },

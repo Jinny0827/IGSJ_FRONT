@@ -129,13 +129,6 @@ export default {
     inqWrite() {
       this.$axios
         .post(this.$serverUrl + "/inquire/InquireWrite", {
-          /* 
-          private String userId; // 유저아이디
-          private int inquireNum; // 제품문의번
-          private String pno; // 제품번호
-          private String inquireTitle; // 문의제목
-          private String inquireContent; // 문의내용
-          */
           userId: this.userId,
           inquireTitle: this.inquireTitle,
           inquireContent: this.inquireContent,

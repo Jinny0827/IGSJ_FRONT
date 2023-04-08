@@ -7,7 +7,7 @@
 
         <!--결제완료타이틀-->
         <div class="finish">
-            <p class="finish_ordernum">주문번호 </p>
+            <p class="finish_ordernum">주문번호 {{ orderFinishList.orderNum }}</p>
             <p class="finish_title">주문과 결제가 정상적으로 완료되었습니다.</p>
             <p class="finish_info">업체(브랜드)의 주문 확인 후 발송됩니다.</p>
 
@@ -25,11 +25,11 @@
                 <ul class="payment_info_box">
                     <li style="border-bottom: 1px solid #e5e5e5;">
                         <span class="payment_item_label">입금 정보</span>
-                        <span class="payment_item_area">payset(결제방법)</span>
+                        <span class="payment_item_area">{{orderFinishList.paySet}}</span>
                     </li>
                     <li>
                         <span class="payment_item_label">결제 금액</span>
-                        <span class="payment_item_area" style="color: #0078ff;">payMoney(결제총금액)</span>
+                        <span class="payment_item_area" style="color: #0078ff;">{{orderFinishList.payMoney}}</span>
                     </li>
                 </ul>
             </div>
@@ -46,7 +46,7 @@
                     </colgroup>
                     <thead>
                         <tr>
-                            <th>번호</th>
+                            <th></th>
                             <th>상품 정보</th>
                             <th>수량</th>
                             <th>판매가</th>
@@ -54,10 +54,10 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td></td>
-                            <td>product_name(제품이름)</td>
-                            <td>productCnt(상품개수)</td>
-                            <td>productPrice(상품가격)</td>
+                            <td><img :src="orderFinishList.storedFileRootName" class="img_block" alt="product_img"></td>
+                            <td>{{orderFinishList.product_name}}</td>
+                            <td>{{orderFinishList.productCnt}}</td>
+                            <td>{{orderFinishList.product_price}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -70,15 +70,15 @@
                 <ul class="delivery_info_box">
                     <li style="border-bottom: 1px solid #e5e5e5;">
                         <span class="delivery_item_label">수령인</span>
-                        <span class="delivery_item_area">recipient(수령인)</span>
+                        <span class="delivery_item_area">{{orderFinishList.recipient}}</span>
                         <span class="delivery_item_label" style="border-left: 1px solid #e5e5e5;">휴대전화</span>
-                        <span class="delivery_item_area">recipient_phone(수령인번호)</span>
+                        <span class="delivery_item_area">{{orderFinishList.recipient_phone}}</span>
                     </li>
                     <li>
                         <span class="delivery_item_label">배송지</span>
-                        <span class="delivery_item_area">post_address + detail_address + detail_address2</span>
+                        <span class="delivery_item_area">{{ formattedTotalAddress }}</span>
                         <span class="delivery_item_label" style="border-left: 1px solid #e5e5e5;">전화번호</span>
-                        <span class="delivery_item_area">recipient_phone(수령인번호)</span>
+                        <span class="delivery_item_area">{{orderFinishList.recipient_phone}}</span>
                     </li>
                 </ul>
             </div>
@@ -94,14 +94,46 @@
 
 <script>
 export default {
-    name: 'OrderFinish',
-    data() {
-        return {
-
+    data(){
+        return{
+            orderFinishList:{
+                orderNum: '',
+                recipient: '',
+                recipient_phone: '',
+                post_address: '',
+                detail_address: '',
+                detail_address2: '',
+                productCnt: '',
+                paySet: '',
+                payMoney: '',
+                pno: '',
+                product_name: '',
+                product_price: '',
+            }
         }
     },
-    methods: {
-        
+    created() {
+        this.orderNum = this.$route.params.orderNum
+        this.getOrderFinishList(this.orderNum)
+    },
+    computed: {
+        formattedTotalAddress() {
+            const totalAddress = '(' + this.orderFinishList.post_address + ')' + this.orderFinishList.detail_address + this.orderFinishList.detail_address2
+            return totalAddress
+        }
+    },
+    methods:{
+        getOrderFinishList(orderNum){
+            this.$axios.get(this.$serverUrl + "/order/orderFinishPage?orderNum=" + orderNum
+            ).then((res) => {
+                console.log(res.data)
+                this.orderFinishList = res.data
+            }).catch((err) => {
+                if (err.message.indexOf('Network Error') > -1) {
+                    alert('주문 정보 조회 불가')
+                }
+            })
+        }
     }
 };
 </script>
@@ -211,6 +243,9 @@ ul {
 }
 
 /*상품 정보 */
+.img_block{
+    width: 100%;
+}
 .product_info {
     margin-bottom: 50px;
 }

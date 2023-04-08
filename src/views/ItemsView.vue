@@ -57,7 +57,6 @@ export default {
     }
   },
   created(){
-    this.$store.commit('setUrl', window.location.href)
     this.fn_CategoryDetails(this.curCno)
     this.fn_showProducts(this.curCno)
   },
