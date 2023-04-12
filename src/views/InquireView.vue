@@ -1,7 +1,7 @@
 <template>
   <div class="inquire-box">
     <header class="inquire-title">
-      <h2 class="inquire-tit">나의 1:1문의내역</h2>
+      <h4 class="inquire-tit">나의 1:1문의내역</h4>
       <hr>
     </header>
     <div class="inquire-contents">
@@ -11,6 +11,7 @@
             <h4 class="tit">{{ this.inquireInfo.inquireNum }}. 문의내역</h4>
           </header>
           <!-- 문의내용 -->
+          <div class="inq-con">
           <table class="n-table table-row">
             <tbody>
               <tr>
@@ -35,48 +36,51 @@
                 <th scope="row">문의내용</th>
                 <td>
                   <textarea name="qa_msg" cols="100" rows="100" class="textarea-input"
-                    readonly>{{ this.inquireInfo.inquireContent }}</textarea>
+                  readonly>{{ this.inquireInfo.inquireContent }}</textarea>
                 </td>
               </tr>
             </tbody>
           </table>
-
+          </div>
+          <!-- 문의내용 -->
+          
           <!-- 답글내용 -->
-          <div v-if="this.answerInfo.ansContent != undefined">
-            <h4 class="tit">{{ this.inquireInfo.inquireNum }}.번 문의 답변내역</h4>
+          <div class="ans-content" v-if="this.answerInfo.ansContent != undefined">
+            <h4 class="tit">{{ this.inquireInfo.inquireNum }}. 문의 답변</h4>
             <table class="n-table table-row">
               <tbody>
                 <tr class="n-same-row">
-                  <th scope="row">문의내용</th>
+                  <th scope="row">답변내용</th>
                   <td>
                     <textarea name="qa_msg" cols="100" rows="100" class="textarea-input"
                     readonly>{{ answerInfo.ansContent }}</textarea>
                   </td>
                 </tr>
                 <tr>
-                <th scope="row">작성날짜</th>
-                <td>
-                  <span id="reg_date" type="text" class="n-input" readonly>
-                    {{ convertTime(answerInfo.ansRegDate) }}
-                  </span>
-                </td>
+                  <th scope="row">작성날짜</th>
+                  <td>
+                    <span id="reg_date" type="text" class="n-input" readonly>
+                      {{ convertTime(answerInfo.ansRegDate) }}
+                    </span>
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div v-else>
-            <h2>답변 내역이 없습니다.</h2>
+          <div class="ans-x" v-else>
+            <h4>답변 내역이 없습니다.</h4>
           </div>
         </div>
       </div>
     </div>
+    <!-- 답글내용 -->
     <div class="btn-gr">
-      <router-link :to="{ name: 'InquireModify', params: { inquireNum: this.inquireInfo.inquireNum } }">
-        <button type="button" class="n-btn btn-mo">문의수정</button>
+      <router-link :to="{ name: 'AnswerWrite', params: { inquireNum: this.inquireInfo.inquireNum } }">
+        <button type="button" class="n-btn btn-ans">답변하기</button>
       </router-link>
 
-      <router-link :to="{ name: 'AnswerWrite', params: { inquireNum: this.inquireInfo.inquireNum } }">
-        <button type="button" class="n-btn btn-mo">답변하기</button>
+      <router-link :to="{ name: 'InquireModify', params: { inquireNum: this.inquireInfo.inquireNum } }">
+        <button type="button" class="n-btn btn-mo">문의수정</button>
       </router-link>
 
       <button type="button" class="n-btn btn-del" @click="inquireDel()">삭제하기</button>
@@ -86,12 +90,15 @@
       </router-link>
     </div>
   </div>
+
+  
 </template>
 
 <script>
 export default {
   data() {
     return {
+
       inquireInfo: {
         userId: "",
         inquireNum: "",
@@ -206,6 +213,7 @@ td {
 
 ul {
   padding: 0;
+  list-style: none;
 }
 
 hr {
@@ -219,6 +227,7 @@ body {
 .inquire-tit {
   margin: 0;
   padding: 20px;
+  font-weight: 600;
 }
 
 .inquire-box {
@@ -234,7 +243,7 @@ body {
 
 .n-section-title {
   border-bottom: 2px solid #ccc;
-  margin-top: 20px;
+  padding: 10px 0;
   line-height: 1.5;
   font-size: 14px;
   position: relative;
@@ -246,7 +255,7 @@ body {
   font-size: 14px;
   border-collapse: collapse;
   table-layout: fixed;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 2px solid #ccc;
 }
 
 .n-table th {
@@ -293,7 +302,7 @@ body {
 
 .textarea-input {
   width: 100%;
-  height: 200px;
+  height: 150px;
   padding: 5px 6px;
   border: none;
   background-color: #ffffff;
@@ -303,6 +312,48 @@ body {
   transition: border 0.2s ease-in-out;
   pointer-events: none;
 }
+
+.inq-con {
+}
+
+.ans-x {
+  height: 90px;
+  background-color: #f1f1f1;
+}
+
+.ans-x h4  {
+  margin: 0;
+  padding: 30px 0;
+  text-align: center;
+}
+
+.ans-content {
+  background-color: #f2f2f2;
+}
+
+.ans-content h4 {
+  margin: 0;
+  padding: 10px 0;
+}
+
+.ans-content .textarea-input {
+  background-color: #f2f2f2;
+}
+
+.ans-content .n-input {
+  background-color: #f2f2f2;
+}
+
+.ans-content .n-same-row {
+  border-top: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+}
+
+.ans-content > .n-table.table-row th  {
+  text-align: center;
+  vertical-align: inherit;
+}
+
 
 .btn-gr {
   display: flex;
@@ -347,7 +398,20 @@ body {
   transition: background 0.3s ease-in-out;
 }
 
+.n-btn.btn-ans{
+  border: none;
+  background-color: #000000;
+}
+
+.n-btn.btn-ans:hover {
+  border: none;
+  background-color: #0a3bffbe;
+  transition: background 0.3s ease-in-out;
+}
+
 textarea{
   resize: none;
 }
+  
+
 </style>

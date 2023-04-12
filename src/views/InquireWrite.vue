@@ -39,7 +39,7 @@
           </li>
           <li>
             1:1문의 처리 내역은
-            <router-link to="/InquireList" class="button"
+            <router-link to="/inquire/InquireList" class="button"
               >나의 문의내역</router-link
             >에서 확인하실 수 있습니다.
           </li>

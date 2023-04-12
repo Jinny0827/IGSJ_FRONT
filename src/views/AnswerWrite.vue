@@ -11,6 +11,7 @@
             <h4 class="tit">{{ this.inquireInfo.inquireNum }} 번 문의내역</h4>
           </header>
           <!-- 문의내용 -->
+          <div class="inq-con">
           <table class="n-table table-row">
             <tbody>
               <tr>
@@ -40,31 +41,39 @@
               </tr>
             </tbody>
           </table>
+          </div>
+          <!-- 문의내용 -->
           <!-- 답변하기 -->
-          <header class="n-section-title">
-            <h4 class="tit">{{ this.inquireInfo.inquireNum }} 번 문의내역 답변하기</h4>
-          </header>
-          <table class="n-table table-row">
-            <tbody>
-              <tr class="n-same-row">
-                <th scope="row">답변내역작성</th>
-                <td>
-                  <textarea name="qa_msg" cols="100" rows="100" class="answer-textarea" v-model="this.answerInfo.ansContent"></textarea>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="ans-content">
+            <header class="n-section-title">
+              <h4 class="tit">{{ this.inquireInfo.inquireNum }}. 문의내역 답변작성</h4>
+            </header>
+            <table class="n-table table-row">
+              <tbody>
+                <tr class="n-same-row">
+                  <th scope="row">답변내역작성</th>
+                  <td>
+                    <textarea name="qa_msg" cols="100" rows="100" class="answer-textarea" v-model="this.answerInfo.ansContent"></textarea>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- 답변하기 -->
         </div>
       </div>
     </div>
     <div class="btn-gr">
 
-      <button type="button" class="n-btn btn-mo" @click="answerWrite()">답변완료</button>
+      <button type="button" class="n-btn btn-wr" @click="answerWrite()">답변완료</button>
 
       <router-link to="/inquire/InquireList">
         <button type="button" class="n-btn btn-mo">목록으로</button>
       </router-link>
     </div>
+  </div>
+  <div class="review-box">
+    <div class="review"></div>
   </div>
 </template>
 
@@ -198,7 +207,6 @@ body {
 
 .n-section-title {
   border-bottom: 2px solid #ccc;
-  margin-top: 20px;
   line-height: 1.5;
   font-size: 14px;
   position: relative;
@@ -256,7 +264,7 @@ body {
 
 .inquire-textarea{
   width: 100%;
-  height: 200px;
+  height: 150px;
   padding: 5px 6px;
   border: none;
   background-color: #ffffff;
@@ -266,6 +274,31 @@ body {
   transition: border 0.2s ease-in-out;
   resize: none;
   pointer-events: none;
+}
+
+.ans-content {
+  background-color: #f2f2f2;
+}
+
+.ans-content .n-section-title {
+  border-top: 2px solid #ccc;
+  border-bottom: none;
+}
+
+.ans-content .answer-textarea {
+  background-color: #fff;
+  width: 950px;
+}
+
+
+.ans-content .n-same-row {
+  border-top: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+}
+
+.ans-content > .n-table.table-row th  {
+  text-align: center;
+  vertical-align: inherit;
 }
 
 .answer-textarea{
@@ -313,12 +346,12 @@ body {
   transition: background 0.3s ease-in-out;
 }
 
-.n-btn.btn-del {
+.n-btn.btn-wr {
   border: none;
   background-color: #000000;
 }
 
-.n-btn.btn-del:hover {
+.n-btn.btn-wr:hover {
   border: none;
   background-color: #0a3bffbe;
   transition: background 0.3s ease-in-out;

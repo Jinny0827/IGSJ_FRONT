@@ -15,9 +15,14 @@
           </router-link>
         </li>
         <li class="cs-tap">
-          <router-link to="/inquire/InquireList" class="button">
+          <router-link to="/inquire/InquireList" class="button" v-if="this.$store.state.userInfo.userId != null">
             <span class="tap-title">My Question</span>
             <span class="tap-t">내 문의내역</span>
+          </router-link>
+          <router-link to="/login" class="button" v-else>
+            <span class="tap-title">My Question</span>
+            <span class="tap-t">내 문의내역</span>
+            <span class="login-noitce">로그인 후 이용가능</span>
           </router-link>
         </li>
       </ul>
@@ -291,5 +296,10 @@ th {
   float: right;
   background-color: #000;
   color: #f1f1f1;
+}
+
+.login-noitce{
+  font-size: 5px;
+  font-weight: 400;
 }
 </style>
