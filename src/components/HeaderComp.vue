@@ -41,7 +41,7 @@
       <router-link to="/login/not-yet">최근 본 상품</router-link>
       <router-link to="/login/not-yet" style="color:red;">좋아요</router-link>
       <router-link :to="this.$store.state.myCartLink">장바구니</router-link>
-      <router-link to="/login/not-yet">주문배송조회</router-link>
+      <router-link to="/orderList">주문배송조회</router-link>
       <router-link to="/notice/NoticeList">고객센터</router-link>
       <div v-if="this.$store.state.idConfirmed===true" @click="logout">로그아웃</div>
 

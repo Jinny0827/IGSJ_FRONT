@@ -6,8 +6,8 @@
         </div>
 
         <div class="order_info">
-            <span class="ordernum">주문번호 {{ orderDetailList.orderNum }}</span>
-            <span>주문일자 {{ convertTime(orderDetailList.order_date) }}</span>
+            <span class="ordernum">주문번호 {{ orderDetailOne.orderNum }}</span>
+            <span>주문일자 {{ convertTime(orderDetailOne.order_date) }}</span>
         </div>
 
         <!--목록-->
@@ -21,22 +21,24 @@
                 <thead>
                     <tr>
                         <th>상품정보</th>
-                        <th>주문금액(수량)</th>
+                        <th>주문수량</th>
+                        <th>주문금액</th>
                         <th>주문상태</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr :key = "index" v-for="(orderDetailList, index) in orderDetailList">
                         <td>
                             <div style="display:flex">
-                                <!-- <router-link :to="{ name: 'product', params: { pno: orderDetailList.pno } }"
+                                <router-link :to="{ name: 'product', params: { pno: orderDetailList.pno } }"
                                     class="product_name">
                                     <img :src="orderDetailList.storedFileRootName" class="img_block" alt="product_name">
                                     <p class="product_name">{{ orderDetailList.product_name }}</p>
-                                </router-link> -->
+                                </router-link>
                             </div>
                         </td>
-                        <td>{{ orderDetailList.product_price }}</td>
+                        <td class = "productCnt">{{ orderDetailList.productCnt }} 개</td>
+                        <td>{{ Number(orderDetailList.product_price).toLocaleString() }} 원</td>
                         <td>{{ orderDetailList.paymentStatus }}</td>
                     </tr>
                 </tbody>
@@ -59,11 +61,11 @@
                 <tbody>
                     <tr>
                         <th>이름</th>
-                        <td>{{ orderDetailList.recipient }}</td>
+                        <td>{{ orderDetailOne.recipient }}</td>
                     </tr>
                     <tr>
                         <th>연락처</th>
-                        <td>{{ orderDetailList.recipient_phone }}</td>
+                        <td>{{ orderDetailOne.recipient_phone }}</td>
                     </tr>
                     <tr>
                         <th>배송지 주소</th>
@@ -81,15 +83,15 @@
                     <tbody>
                         <tr>
                             <th>상품 합계</th>
-                            <td>{{ orderDetailList.payMoney }}원</td>
+                            <td>{{ orderDetailOne.payMoney }}원</td>
                         </tr>
                         <tr>
                             <th>최종 결제 금액</th>
-                            <td>{{ orderDetailList.payMoney }}원</td>
+                            <td>{{ orderDetailOne.payMoney }}원</td>
                         </tr>
                         <tr>
                             <th>결제 수단</th>
-                            <td>{{ orderDetailList.paySet }}</td>
+                            <td>{{ orderDetailOne.paySet }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -123,31 +125,37 @@ export default {
     data() {
         return {
             orderDetailList: {
-                // pno: '',
-                orderNum: '',
-                order_date: this.convertTime(),
-                post_address: '',
-                detail_address: '',
-                detail_address2: '',
-                recipient: '',
-                recipient_phone: '',
+                pno: '',
                 storedFileRootName: '',
                 product_name: '',
                 product_price: '',
+                productCnt : '',
                 paymentStatus: '',
                 orderDetailNum: '',
-                payMoney: '',
-                paySet: ''
-            }
+            },
+
+            orderDetailOne :  {
+                orderNum : '',
+                order_date : '',
+                order_date: this.convertTime(),
+                post_address : '',
+                detail_address : '',
+                detail_address2 : '',
+                recipient : '',
+                recipient_phone : '',
+                payMoney : '',
+                paySet : ''
+            },
         }
     },
     created() {
         this.orderNum = this.$route.params.orderNum
         this.getOrderDetailList(this.orderNum)
+        this.getOrderDetailOne(this.orderNum)
     },
     computed: {
         formattedTotalAddress() {
-            const totalAddress = '(' + this.orderDetailList.post_address + ')' + this.orderDetailList.detail_address + this.orderDetailList.detail_address2
+            const totalAddress = '(' + this.orderDetailOne.post_address + ')' + this.orderDetailOne.detail_address + this.orderDetailOne.detail_address2
             return totalAddress
         }
     },
@@ -158,14 +166,23 @@ export default {
             ).then((res) => {
                 console.log(res.data)
                 this.orderDetailList = res.data
-
             }).catch((err) => {
                 if (err.message.indexOf('Network Error') > -1) {
                     alert('주문 정보 조회 불가')
                 }
             })
         },
-
+        getOrderDetailOne(orderNum) {
+            this.$axios.get(this.$serverUrl + "/order/orderDetailOne?orderNum=" + orderNum
+            ).then((res) => {
+                console.log(res.data)
+                this.orderDetailOne = res.data
+            }).catch((err) => {
+                if (err.message.indexOf('Network Error') > -1) {
+                    alert('주문 정보 조회 불가')
+                }
+            })
+        },
         convertTime(order_date) {
             var time = new Date(order_date).getTime();
             var date = new Date(time);
@@ -248,7 +265,6 @@ a {
     display: flex;
     align-items: center;
 }
-
 
 /*배송지 정보*/
 .delivery_info {

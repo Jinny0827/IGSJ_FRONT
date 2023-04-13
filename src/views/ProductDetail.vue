@@ -126,11 +126,15 @@
       <img :src="this.productInfo.image" :alt="this.productInfo.pno" style="width: 100%;">
     </div>
   </div>
+  <ReviewVue></ReviewVue>
 </template>
 
 <script>
 import {Tooltip} from 'bootstrap'
+import ReviewVue from './Review.vue'
+
 export default {
+  components: {ReviewVue},
   data() {
     return {
       pno:'',
