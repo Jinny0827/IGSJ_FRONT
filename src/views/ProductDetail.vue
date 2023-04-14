@@ -126,12 +126,12 @@
       <img :src="this.productInfo.image" :alt="this.productInfo.pno" style="width: 100%;">
     </div>
   </div>
-  <ReviewVue></ReviewVue>
+  <ReviewVue ref="review_vue"/>
 </template>
 
 <script>
 import {Tooltip} from 'bootstrap'
-import ReviewVue from './Review.vue'
+import ReviewVue from '../components/Review.vue'
 
 export default {
   components: {ReviewVue},
@@ -151,6 +151,9 @@ export default {
   },
   mounted(){
     new Tooltip(document.body, {selector: "[data-bs-toggle='tooltip']"})
+    this.$refs.review_vue.reviewRead(this.pno)
+    this.$refs.review_vue.pno = this.pno
+    this.$refs.review_vue.id = this.$store.state.userInfo.userId
   },
   watch: {
     size: function(val){

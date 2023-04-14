@@ -95,7 +95,7 @@ export default {
         writer: '',
         content: '',
         title: '',
-        reg_date: this.convertTime()
+        reg_date: ''
       },
     }
   },

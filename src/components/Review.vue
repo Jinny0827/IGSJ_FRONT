@@ -12,7 +12,8 @@
     <div class="review-write">
       <form>
         <div class="rev-info">
-          <span>작성자ID</span>
+          <span v-if=" this.id !== undefined ">{{this.$store.state.userInfo.userId}}</span>
+          <span v-else>작성자ID</span>
           <p class="hide">pno</p>
         </div>
         <textarea class="rev-txt" placeholder="상품에 대한 평가를 20자 이상 작성해 주세요." minlength="20" v-model="writeRvContent"></textarea>
@@ -31,9 +32,9 @@
             <p class="hide">{{review.pno}}</p>
           </div>
           <p>{{review.rvContent}}</p>
-          <div class="btn-gr">
-            <button type="button" :class="{'btn-a':stateActivate}" @click="modalPopUp(review.rvno)">수정</button>
-            <button type="button" :class="{'btn-b':stateActivate}" @click="reviewDelete(review.rvno)">삭제</button>
+          <div class="btn-gr" v-if="this.id===review.rvWriter">
+            <button type="button" class='btn-a' @click="modalPopUp(review.rvno)">수정</button>
+            <button type="button" class='btn-b' @click="reviewDelete(review.rvno)">삭제</button>
           </div>
         </li>
       </ul>
@@ -67,47 +68,50 @@
   export default {
     data() {
       return {
+        id:'', // (부모Comp에서 지정) id
+        pno: '', // (부모Comp에서 지정) pno
         writeRvContent: '',
         modalState: false,
-        stateActivate: true,
         reviewList: {},
         reviewToBeUpdated: '',
         newRvContent: ''
       }
     },
-    created(){
-      this.reviewRead(window.location.href.slice(37))
-    },
     methods:{
-       // 리뷰 조회(완성) - 보완 : 로그인 정보와 연동하여 수정/삭제 버튼 활성/비활성화 시키기
-      reviewRead(pno) {
+      reviewRead(pno) { // 리뷰 조회
         this.$axios.get(this.$serverUrl + '/review/getReviewList/'+pno)
         .then((res) => {this.reviewList = res.data})
         .catch((err) => {if (err.message.indexOf('Network Error') > -1) {alert('Review Read Error')}
         })
       },
-      // 리뷰 작성(완성) - 보완 : 로그인 정보 확인 및 연동
-      reviewCreate(){
-        this.$axios.post(this.$serverUrl + '/review/writeReview', {
-            pno: window.location.href.slice(37),
+      reviewCreate() { // 리뷰 작성
+        if(this.id === undefined){
+          alert("로그인 먼저 해주세요")
+          this.$router.push('/login')
+        }
+        else {
+          this.$axios.post(this.$serverUrl + '/review/writeReview', {
+            pno: this.pno,
             rvContent: this.writeRvContent,
-            rvWriter: '이이시시후후'
-        })
-        .then((res) => {
-          res.data ? alert('작성이 완료되었습니다.') : alert('작성 Denied')
-        })
-        .catch((err) => {if (err.message.indexOf('Network Error') > -1) {alert('Review Create Error')}})
+            rvWriter: this.id
+          })
+          .then((res) => {
+            res.data ? alert('작성이 완료되었습니다.') : alert('WRITE has been Denied')
+            location.reload()
+          })
+          .catch((err) => {if (err.message.indexOf('Network Error') > -1) {alert('Review Create Error')}}) 
+        }
       },
-      // 리뷰 수정(완성) - 보완 : 자동으로 새로고침
-      reviewUpdate(reviewNo){ 
+      reviewUpdate(reviewNo){ // 리뷰 수정
         this.$axios.post(this.$serverUrl + '/review/modifyReview', {
-          pno : window.location.href.slice(37),
+          pno : this.pno,
           rvContent : this.newRvContent,
           rvno : reviewNo
         })
         .then((res) => {
-          res.data ? alert('리뷰가 수정되었습니다.') : alert('수정 Denied')
+          res.data ? alert('리뷰가 수정되었습니다.') : alert('UPDATE has been Denied')
           this.modalPopDown()
+          location.reload()
         })
         .catch((err) => {
           if (err.message.indexOf('Network Error') > -1) {
@@ -115,25 +119,24 @@
           }
         })
       },
-      // 리뷰 삭제(완성) - 보완 : 자동으로 새로고침
-      reviewDelete(reviewNo){
+      reviewDelete(reviewNo){ // 리뷰 삭제
         this.$axios.post(this.$serverUrl + '/review/removeReview', {
-          pno : window.location.href.slice(37),
+          pno : this.pno,
           rvno : reviewNo
         })
         .then((res) => {
           res.data ? alert("리뷰가 삭제되었습니다.") : alert("Your 'DELETE' Trial has been failed/denied")
+          location.reload()
         })
         .catch((err) => {if (err.message.indexOf('Network Error') > -1) {alert('Review Delete Error')}})
       },
-      // 팝업창 생성(수정)
-      modalPopUp(rvno){
+      modalPopUp(rvno){ // 팝업창(리뷰 수정) 생성
         this.reviewToBeUpdated = rvno
         this.modalState = true
       },
-      // 팝업창 제거(수정)
-      modalPopDown(){
+      modalPopDown(){ // 팝업창(리뷰 수정) 제거
         this.reviewToBeUpdated = ''
+        this.newRvContent=''
         this.modalState = false
       }
     }
