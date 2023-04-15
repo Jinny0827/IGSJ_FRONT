@@ -14,9 +14,10 @@
         <div class="order_view">
             <table>
                 <colgroup>
-                    <col style="width:50%">
-                    <col style="width:25%">
-                    <col style="width:25%">
+                    <col style="width:40%">
+                    <col style="width:20%">
+                    <col style="width:20%">
+                    <col style="width:20%">
                 </colgroup>
                 <thead>
                     <tr>

@@ -26,7 +26,8 @@
                         <th>상품정보</th>
                         <th>주문일자</th>
                         <th>주문번호</th>
-                        <th>주문금액(수량)</th>
+                        <th>주문수량</th>
+                        <th>주문금액</th>
                         <th>주문상태</th>
                     </tr>
                 </thead>
@@ -40,9 +41,11 @@
                                 </router-link>
                             </div>
                         </td>
-                        <td><input v-model="order.order_date" readonly></td> 
+                        <td>{{ convertTime(order.order_date) }}</td>
+                        <!-- <td><input v-model="order.order_date" readonly></td>  -->
                         <td><router-link :to="{name: 'orderDetail', params: {orderNum:order.orderNum}}"><input v-model="order.orderNum" class="orderNum"></router-link></td> 
-                        <td><input v-model="order.productPrice" readonly></td> 
+                        <td>{{ order.productCnt }}개</td>
+                        <td>{{  Number(order.product_price).toLocaleString() }} 원 </td> 
                         <td><input v-model="order.paymentStatus" readonly></td>
                     </tr>
                 </tbody>
@@ -58,9 +61,10 @@ export default {
             orderList:{
                 storedFileRootName: '',
                 product_name: '',
-                order_date: '',
+                order_date: this.convertTime(),
                 orderNum: '',
-                productPrice: '',
+                product_price: '',
+                productCnt : '',
                 paymentStatus: '',
                 pno:''
             },
@@ -82,6 +86,17 @@ export default {
                 }
             })
         },
+        convertTime(order_date) {
+            var time = new Date(order_date).getTime();
+            var date = new Date(time);
+            let noticeYear = date.getFullYear();
+            let noticeMonth = date.getMonth() + 1;
+            let noticeDate = date.getDate();
+
+            let fullDate = noticeYear + "년 " + noticeMonth + "월 " + noticeDate + "일";
+
+            return fullDate;
+        }
     }
 }
 
