@@ -23,7 +23,7 @@ const routes = [
   { path: '/cart',                  name: 'cart',          component: () => import("../views/Cart.vue")},
   { path: '/orderList',             name: 'orderlist', component: () => import("../views/OrderList.vue")},
   { path: '/orderPage',             name: 'orderPage', component: () => import("../views/OrderPage.vue")},
-  { path: '/order/orderFinish/:orderNum',  name: 'orderFinish', component: () => import("../views/OrderFinish.vue")},
+  { path: '/orderFinish',           name: 'orderFinish', component: () => import("../views/OrderFinish.vue")},
   { path: '/order/orderDetailPage/:orderNum', name: 'orderDetail', component: () => import("../views/OrderDetail.vue")},
   { path: '/login/not-yet',         name: 'not-yet', component: () => import("../views/UnderConstruction.vue")  }
 

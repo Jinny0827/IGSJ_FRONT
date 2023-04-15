@@ -110,12 +110,12 @@
                     </div>
                 </div>
             </div>
+        </form>
 
             <!--결제하기 버튼-->
             <div class="pay_btn">
                 <button @click="Pay()">결제하기</button>
             </div>
-        </form>
 
     </div>
 </template>
@@ -238,29 +238,26 @@ export default {
             })
         },
         Pay() {
-
-            if (document.getElementById("recipient") == '') {
+            /* if (document.getElementById("recipient") == '') {
                 alert("수령인을 입력해주십시오.")
-                document.getElementById("recipient").focus()
+                document.getElementById("recipient").focus();
                 return false
             }
             if (document.getElementById("recipient_phone") == '') {
                 alert("수령인 전화번호를 입력해주십시오.")
-                document.getElementById("recipient_phone").focus()
+                document.getElementById("recipient_phone").focus();
                 return false
             }
             if (document.getElementById("detail_address2") == '') {
                 alert("상세주소를 입력해주십시오.")
-                document.getElementById("detail_address2").focus()
+                document.getElementById("detail_address2").focus();
                 return false
             }
             if (document.getElementById("tabs").value == '무통장입금' && document.getElementById("bank").value == '') {
                 alert("입금은행을 선택해주십시오.")
-                document.getElementById("bank").focus()
+                document.getElementById("bank").focus();
                 return false
-            }
-
-
+            } */
             this.$axios.post(this.$serverUrl + "/order/orderNum", {
                 userId: this.$store.state.userInfo.userId,
                 post_address: this.orderDTO.postAddress,
@@ -268,10 +265,8 @@ export default {
                 detail_address2: this.orderDTO.detailAddress,
                 recipient: this.recipient,
                 recipient_phone: this.recipient_phone,
-
                 paySet: this.tabs[this.currentTab],
                 payMoney: this.formattedTotalPrice,
-
                 payBank: this.selectBank
 
             }).then((res) => {
@@ -280,7 +275,9 @@ export default {
                 if (err.message.indexOf('Network Error') > -1) {
                     alert('주문 전송 불가')
                 }
-            })
+            }),
+            alert("주문이 완료되었습니다.");
+            location.href = '/orderFinish';
         }
     }
 };
