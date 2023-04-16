@@ -39,7 +39,7 @@
                             </div>
                         </td>
                         <td class = "productCnt">{{ orderDetailList.productCnt }} 개</td>
-                        <td>{{ Number(orderDetailList.product_price).toLocaleString() }} 원</td>
+                        <td>{{ Number(orderDetailList.product_price * orderDetailList.productCnt).toLocaleString() }} 원</td>
                         <td>{{ orderDetailList.paymentStatus }}</td>
                     </tr>
                 </tbody>

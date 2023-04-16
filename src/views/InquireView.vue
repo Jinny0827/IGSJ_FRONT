@@ -12,38 +12,38 @@
           </header>
           <!-- 문의내용 -->
           <div class="inq-con">
-          <table class="n-table table-row">
-            <tbody>
-              <tr>
-                <th scope="row">작성자</th>
-                <td>
-                  <input type="text" class="n-input" v-model="this.inquireInfo.userId" readonly />
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">작성날짜</th>
-                <td>
-                  <input id="reg_date" type="text" class="n-input" v-model="this.inquireInfo.inquireRegDate" readonly />
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">제목</th>
-                <td>
-                  <input type="text" class="n-input" name="subject" v-model="this.inquireInfo.inquireTitle" readonly />
-                </td>
-              </tr>
-              <tr class="n-same-row">
-                <th scope="row">문의내용</th>
-                <td>
-                  <textarea name="qa_msg" cols="100" rows="100" class="textarea-input"
-                  readonly>{{ this.inquireInfo.inquireContent }}</textarea>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+            <table class="n-table table-row">
+              <tbody>
+                <tr>
+                  <th scope="row">작성자</th>
+                  <td>
+                    <input type="text" class="n-input" v-model="this.inquireInfo.userId" readonly />
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">작성날짜</th>
+                  <td>
+                    <input id="reg_date" type="text" class="n-input" v-model="this.inquireInfo.inquireRegDate" readonly />
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">제목</th>
+                  <td>
+                    <input type="text" class="n-input" name="subject" v-model="this.inquireInfo.inquireTitle" readonly />
+                  </td>
+                </tr>
+                <tr class="n-same-row">
+                  <th scope="row">문의내용</th>
+                  <td>
+                    <textarea name="qa_msg" cols="100" rows="100" class="textarea-input"
+                      readonly>{{ this.inquireInfo.inquireContent }}</textarea>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
           <!-- 문의내용 -->
-          
+
           <!-- 답글내용 -->
           <div class="ans-content" v-if="this.answerInfo.ansContent != undefined">
             <h4 class="tit">{{ this.inquireInfo.inquireNum }}. 문의 답변</h4>
@@ -53,7 +53,7 @@
                   <th scope="row">답변내용</th>
                   <td>
                     <textarea name="qa_msg" cols="100" rows="100" class="textarea-input"
-                    readonly>{{ answerInfo.ansContent }}</textarea>
+                      readonly>{{ answerInfo.ansContent }}</textarea>
                   </td>
                 </tr>
                 <tr>
@@ -74,15 +74,12 @@
       </div>
     </div>
     <!-- 답글내용 -->
-    <div class="btn-gr">
+    <div class="btn-gr" v-if="this.$store.state.userInfo.userVerify == 128">
       <router-link :to="{ name: 'AnswerWrite', params: { inquireNum: this.inquireInfo.inquireNum } }">
         <button type="button" class="n-btn btn-ans">답변하기</button>
       </router-link>
-
-      <router-link :to="{ name: 'InquireModify', params: { inquireNum: this.inquireInfo.inquireNum } }">
-        <button type="button" class="n-btn btn-mo">문의수정</button>
-      </router-link>
-
+    </div>
+    <div class="btn-gr" v-else>
       <button type="button" class="n-btn btn-del" @click="inquireDel()">삭제하기</button>
 
       <router-link to="/inquire/InquireList">
@@ -90,8 +87,6 @@
       </router-link>
     </div>
   </div>
-
-  
 </template>
 
 <script>
@@ -313,15 +308,14 @@ body {
   pointer-events: none;
 }
 
-.inq-con {
-}
+.inq-con {}
 
 .ans-x {
   height: 90px;
   background-color: #f1f1f1;
 }
 
-.ans-x h4  {
+.ans-x h4 {
   margin: 0;
   padding: 30px 0;
   text-align: center;
@@ -349,7 +343,7 @@ body {
   border-bottom: 2px solid #fff;
 }
 
-.ans-content > .n-table.table-row th  {
+.ans-content>.n-table.table-row th {
   text-align: center;
   vertical-align: inherit;
 }
@@ -398,7 +392,7 @@ body {
   transition: background 0.3s ease-in-out;
 }
 
-.n-btn.btn-ans{
+.n-btn.btn-ans {
   border: none;
   background-color: #000000;
 }
@@ -409,9 +403,7 @@ body {
   transition: background 0.3s ease-in-out;
 }
 
-textarea{
+textarea {
   resize: none;
 }
-  
-
 </style>

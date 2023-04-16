@@ -43,9 +43,9 @@
                         </td>
                         <td>{{ convertTime(order.order_date) }}</td>
                         <!-- <td><input v-model="order.order_date" readonly></td>  -->
-                        <td><router-link :to="{name: 'orderDetail', params: {orderNum:order.orderNum}}"><input v-model="order.orderNum" class="orderNum"></router-link></td> 
+                        <td><router-link :to="{name: 'orderDetail', params: {orderNum:order.orderNum}}"><input v-model="order.orderNum" class="orderNum"></router-link></td>
                         <td>{{ order.productCnt }}개</td>
-                        <td>{{  Number(order.product_price).toLocaleString() }} 원 </td> 
+                        <td>{{  Number(order.product_price * order.productCnt).toLocaleString() }} 원 </td>
                         <td><input v-model="order.paymentStatus" readonly></td>
                     </tr>
                 </tbody>
@@ -68,7 +68,7 @@ export default {
                 paymentStatus: '',
                 pno:''
             },
-            
+
         }
     },
     created() {

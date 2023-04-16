@@ -29,22 +29,22 @@
 					<th scope="row"><label>이름</label></th>
 					<td>
 						<input type="text" class="form-control" id="name" v-model="this.memberDTO.userName" maxlength="20"
-							placeholder="이름 입력" />
+							readonly title="이름은 별도의 인증과정을 거쳐야 수정이 가능합니다." />
 					</td>
 				</tr>
 				<tr class="mypagebirth">
 					<th scope="row"><label>생년월일</label></th>
 					<td>
 						<input type="date" class="form-control" id="birth" v-model="this.memberDTO.userBirth" maxlength="20"
-							placeholder="생년월일 입력" />
+							readonly title="생년월일은 별도의 인증과정을 거쳐야 수정이 가능합니다." />
 					</td>
 				</tr>
 				<tr class="mypagephone">
 					<th scope="row"><label>전화번호</label></th>
 					<td>
 						<input type="tel" class="form-control" id="phoneNumber" v-model="this.memberDTO.userPhoneNumber"
-							onkeyup="this.value=this.value.replace(/[^0-9]/gi,'');" maxlength="20"
-							placeholder="'-'를 제외한 전화번호" />
+							onkeyup="this.value=this.value.replace(/[^0-9]/gi,'');" maxlength="20" readonly
+							title="전화번호는 별도의 인증과정을 거쳐야 수정이 가능합니다." />
 					</td>
 				</tr>
 				<tr class="mypageemail">
@@ -202,26 +202,25 @@ export default {
 					return false
 				}
 				this.$axios.post(this.$serverUrl + "/member/removeMember", {
-					userId: this.memberDTO.userId,
-					userPwd: this.memberDTO.userPwd
+					userId: this.memberDTO.userId
 				}).then((res) => {
-					console.log(res)
-					alert("회원탈퇴가 완료되었습니다.")
-					location.href = "http://localhost:8080/"
-				}).catch((err) => {
-					if (err.message.indexOf('Network Error') > -1) {
-						alert('회원탈퇴 오류')
+					console.log(res);
+					console.log(res.data);
+
+					if (res.data == 1) {
+						alert("회원탈퇴가 완료되었습니다.")
+						this.$store.commit('signOut')
+						location.href = "http://localhost:8080/"
 					}
-				}),
-					this.$axios.post(this.$serverUrl + "/address/removeAddress", {
-						userId: this.memberDTO.userId,
-					}).then((res) => {
-						console.log(res)
-					}).catch((err) => {
-						if (err.message.indexOf('Network Error') > -1) {
-							alert('회원주소탈퇴 오류')
-						}
-					})
+
+				}).catch((err) => {
+					alert("회원 탈퇴에 실패 하였습니다.\n주문목록이나 주문현황을 확인 하신 뒤 관리자에게 문의 해 주세요.");
+					console.log(err.request.status)
+					if(err.request.status == 500){
+						location.href = "http://localhost:8080/inquire/InquireWrite";
+					}
+
+				})
 			} else {
 				alert("회원탈퇴가 취소되었습니다.")
 			}
@@ -332,7 +331,16 @@ export default {
 	width: 200px;
 }
 
-.mypagebirth input{
+input[readonly] {
+	background-color: #bebebe;
+	pointer-events: none;
+}
+
+#birth {
+	background: none;
+}
+
+.mypagebirth input {
 	border: none;
 	pointer-events: none;
 	outline: none;
@@ -365,4 +373,5 @@ export default {
 .span-post {
 	display: inline-flex;
 	align-self: center;
-}</style>
+}
+</style>
