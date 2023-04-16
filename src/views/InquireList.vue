@@ -1,7 +1,8 @@
 <template>
   <div class="inquire-box">
     <header class="inquire-title">
-      <h1 class="tit">나의 1:1문의내역</h1>
+      <h1 class="tit" v-if="this.$store.state.userInfo.userVerify == 128">회원 1:1문의내역</h1>
+      <h1 class="tit" v-else>나의 1:1문의내역</h1>
     </header>
     <table class="n-table table-col">
       <colgroup>
@@ -22,8 +23,15 @@
       </thead>
       <tbody>
         <tr :key="i" v-for="(inquire, i) in inpList">
+          <router-link :to="{ name: 'InquireView', params: { inquireNum: inquire.inquireNum } }" v-if="this.$store.state.userInfo.userVerify == 128">
+            <td>{{ inquire.inquireNum }}</td>
+            <td>{{ inquire.userId }}</td>
+            <td>{{ inquire.inquireTitle }}</td>
+            <td>{{ inquire.inquireContent }}</td>
+            <td>{{ convertTime(inquire.inquireRegDate) }}</td>
+          </router-link>
           <router-link :to="{ name: 'InquireView', params: { inquireNum: inquire.inquireNum } }"
-            v-if="inquire.userId == this.$store.state.userInfo.userId">
+          v-else-if="this.$store.state.userInfo.userVerify != 128 && this.$store.state.userInfo.userId == inquire.userId">
             <td>{{ inquire.inquireNum }}</td>
             <td>{{ inquire.userId }}</td>
             <td>{{ inquire.inquireTitle }}</td>

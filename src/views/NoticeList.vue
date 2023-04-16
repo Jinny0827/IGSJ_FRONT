@@ -15,7 +15,11 @@
           </router-link>
         </li>
         <li class="cs-tap">
-          <router-link to="/inquire/InquireList" class="button" v-if="this.$store.state.userInfo.userId != null">
+          <router-link to="/inquire/InquireList" class="button" v-if="this.$store.state.userInfo.userVerify == 128">
+            <span class="tap-title">User Question</span>
+            <span class="tap-t">회원 문의내역</span>
+          </router-link>
+          <router-link to="/inquire/InquireList" class="button" v-else-if="this.$store.state.userInfo.userId != null">
             <span class="tap-title">My Question</span>
             <span class="tap-t">내 문의내역</span>
           </router-link>

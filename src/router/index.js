@@ -27,6 +27,7 @@ const routes = [
   { path: '/order/orderDetailPage/:orderNum', name: 'orderDetail', component: () => import("../views/OrderDetail.vue")},
   { path: '/login/not-yet',         name: 'not-yet', component: () => import("../views/UnderConstruction.vue")  }
 
+
 ]
 
 const router = createRouter({
